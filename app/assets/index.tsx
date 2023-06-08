@@ -1,10 +1,18 @@
 const assets = {
-  chatIcon: require('./icons/intercom-brands-icon.png'),
-  loadingIcon: require('./icons/loading-data-icon.png'),
-  sternumGif: require('./images/sternum.gif'),
-  circle: require('./images/images.jpeg'),
-  opiRescue: require('./images/opiRescue.png'),
-  back: require('./images/back.png'),
+  headerBg: require('./images/headerBg.png'),
+  headerCircle: require('./images/headerCircle.png'),
+  headerBgCircle: require('./images/headerbgCircle.png'),
+  headerCircleImg: require('./images/headerCircleImg.png'),
+  facebookIcon: require('./images/facebook.png'),
+  googleIcon: require('./images/google.png'),
+  record: require('./images/Mark.png'),
+  camera: require('./images/camera.png'),
+  gallery: require('./images/gallery.png'),
+  line: require('./images/line.png'),
+  // gallery: require('./images/gallery.png'),
+  // gallery: require('./images/gallery.png'),
+  // gallery: require('./images/gallery.png'),
+
 };
 
 export default assets;

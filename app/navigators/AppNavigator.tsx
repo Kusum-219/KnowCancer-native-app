@@ -10,6 +10,9 @@ import {RoutesConstant} from '../../app/navigators/index';
 // import ModalComponent from '@/components/modal/ModalComponent';
 import {NavigatorParamList} from '../../app/navigators/AppNavigator.types';
 import SignIn from '../screens/auth/signInScreen';
+import OtpScreen from '../screens/auth/otpScreen';
+import BasicDetail from '../screens/progressSteps/basicDetailsScreen';
+import ProgressSteps from '../screens';
 // import PickerComponent from '@/components/picker/PickerComponent';
 // import {useAuthContext} from '@/screens/auth/AuthContext';
 // import assets from '@/assets';
@@ -45,7 +48,24 @@ const AppStack = ({theme}: AppStackProps) => {
         <Stack.Screen
           name={RoutesConstant.LOGIN}
           component={SignIn}
+
         />
+         <Stack.Screen
+          name={RoutesConstant.OTP}
+          component={OtpScreen}
+        />
+         <Stack.Screen
+          name={RoutesConstant.PROGRESSTEPS}
+          component={ProgressSteps}
+        />
+         {/* <Stack.Screen
+          name={RoutesConstant.HEALTHRECORD}
+          component={OtpScreen}
+        />
+         <Stack.Screen
+          name={RoutesConstant.UPLOADHEALTHRECORD}
+          component={OtpScreen}
+        /> */}
     
       </Stack.Group>
     </Stack.Navigator>
