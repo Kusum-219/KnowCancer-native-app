@@ -31,29 +31,35 @@ const BasicDetail = ({navigation,route,handlePress}: BasicDetailProps) => {
       label="Full Name"
       mode='outlined'
       style={{
-        width:'90%'
+        width:'90%',
+        marginBottom:20
       }}
     />
       <TextInput
       label="E-mail"
       mode='outlined'
       style={{
-        width:'90%'
+        width:'90%',
+        marginBottom:20
+
       }}
+      right={<TextInput.Icon name="email-outline" color={'red'}/>}
     />
       <TextInput
       label="Phone Number"
       mode='outlined'
       style={{
-        width:'90%'
+        width:'90%',
+        marginBottom:20
+
       }}
     />
-    <View style={{flexDirection:'row',width:'90%',justifyContent:'space-between'}}>
+    <View style={{flexDirection:'row',width:'90%',justifyContent:'space-between',        marginBottom:20}}>
     <TextInput
       label="Gender"
       mode='outlined'
       style={{
-        width:'45%'
+        width:'45%',
       }}
     />
     <TextInput
@@ -68,10 +74,12 @@ const BasicDetail = ({navigation,route,handlePress}: BasicDetailProps) => {
       label="Address"
       mode='outlined'
       style={{
-        width:'90%'
+        width:'90%',
+        marginBottom:20
+
       }}
     />
-     <View style={{flexDirection:'row',width:'90%',justifyContent:'space-between'}}>
+     <View style={{flexDirection:'row',width:'90%',justifyContent:'space-between',        marginBottom:20}}>
     <TextInput
       label="City"
       mode='outlined'

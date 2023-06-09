@@ -13,15 +13,16 @@ const UploadRecord = () => {
             height:300,
             backgroundColor: 'white',
             flex:1,
-            borderRadius:24,
+            borderTopLeftRadius:40,
+            borderTopRightRadius:40,
             paddingVertical:25
         }}>
           <TouchableOpacity style={{
-alignSelf:'flex-end',position: 'absolute',padding:10,
+alignSelf:'flex-end',position: 'absolute',padding:18,
           }}>
           <MIcon
                 // style={{marginLeft: 10,color:'red'}}
-                size={22}
+                size={26}
                 name="close"
                 color={'#8A8072'}
                 style={{}}

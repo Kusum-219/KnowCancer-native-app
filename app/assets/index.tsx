@@ -9,8 +9,16 @@ const assets = {
   camera: require('./images/camera.png'),
   gallery: require('./images/gallery.png'),
   line: require('./images/line.png'),
-  // gallery: require('./images/gallery.png'),
-  // gallery: require('./images/gallery.png'),
+  homeTab: require('./images/home.png'),
+    person: require('./images/user.png'),
+   healthRecord: require('./images/medical-record.png'),
+   profilePic: require('./images/profilePic.png'),
+   support: require('./images/support.png'),
+   logOut: require('./images/exit.png'),
+   rightArrow: require('./images/rightArrow.png'),
+
+  smallBottomView: require('./images/smallBottomView.png'),
+  bottomView: require('./images/bottomView.png'),
   // gallery: require('./images/gallery.png'),
 
 };

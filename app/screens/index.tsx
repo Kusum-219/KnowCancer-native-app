@@ -10,7 +10,7 @@ import {
 import {progressSteps} from './progressSteps/styles';
 import assets from '../../assets';
 import HeaderComponent from '../components/headerComponent/header';
-import {RoutesConstant} from '../../navigators';
+import {RoutesConstant} from '../navigators';
 import BasicDetail from './progressSteps/basicDetailsScreen';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import {Divider} from 'react-native-paper';
@@ -57,6 +57,7 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
           <AddHealthRecord
             handlePress={() => {
               setIndex(2), setHeaderName('Health Record');
+              navigation.navigate(RoutesConstant.HOME_PAGE)
             }}
             navigation={navigation}
           />
@@ -70,11 +71,25 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
         );
     }
   };
+
+  const handlePress = ()=>{
+    console.log(index,'index 75');
+    if (index==0) {
+        navigation.goBack()
+    }
+    else if (index==1){
+        setHeaderName('Basic Detail')
+ setIndex(0)
+    }
+    else if (index==2){
+setIndex(1)
+    }
+  }
   return (
     <View style={{flex: 1}}>
       {headerName == 'View Health Record' ? null : (
         <>
-          <HeaderComponent text={headerName} />
+          <HeaderComponent text={headerName} handleBackPress={handlePress} />
           <View
             style={{
               alignItems: 'center',
@@ -114,7 +129,7 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
                     style={{alignSelf: 'center'}}
                   />
                 ) : (
-                  <Text style={{alignSelf: 'center', color: '#936CAB'}}>1</Text>
+                  <Text style={{alignSelf: 'center', color: '#936CAB',fontWeight:'600',fontSize:18}}>1</Text>
                 )}
               </View>
               <Divider
@@ -156,7 +171,7 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
                     style={{alignSelf: 'center'}}
                   />
                 ) : (
-                  <Text style={{alignSelf: 'center', color: '#936CAB'}}>2</Text>
+                  <Text style={{alignSelf: 'center', color: '#936CAB',fontWeight:'600',fontSize:18}}>2</Text>
                 )}
               </View>
               <Divider
@@ -195,7 +210,7 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
                     style={{alignSelf: 'center'}}
                   />
                 ) : (
-                  <Text style={{alignSelf: 'center',color: '#936CAB'}}>3</Text>
+                  <Text style={{alignSelf: 'center',color: '#936CAB',fontWeight:'600',fontSize:18}}>3</Text>
                 )}
               </View>
             </View>

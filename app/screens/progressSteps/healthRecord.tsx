@@ -31,14 +31,18 @@ const HealthRecord = ({navigation,route,handlePress}: HealthRecordProps) => {
       label="Preferred Language"
       mode='outlined'
       style={{
-        width:'90%'
+        width:'90%',
+        marginBottom:20
+
       }}
     />
       <TextInput
       label="Update Your Health Record"
       mode='outlined'
       style={{
-        width:'90%'
+        width:'90%',
+        marginBottom:20
+
       }}
     />
       {/* <TextInput
@@ -48,7 +52,7 @@ const HealthRecord = ({navigation,route,handlePress}: HealthRecordProps) => {
         width:'90%'
       }}
     /> */}
-    <View style={{flexDirection:'row',width:'90%',justifyContent:'space-between'}}>
+    <View style={{flexDirection:'row',width:'90%',justifyContent:'space-between',        marginBottom:20}}>
     <TextInput
       label="Height"
       mode='outlined'
@@ -75,17 +79,21 @@ const HealthRecord = ({navigation,route,handlePress}: HealthRecordProps) => {
       label="Are you under Treatment"
       mode='outlined'
       style={{
-        width:'90%'
+        width:'90%',
+        marginBottom:20
+
       }}
     />
     <TextInput
       label="New Case"
       mode='outlined'
       style={{
-        width:'90%'
+        width:'90%',
+        marginBottom:20
+
       }}
     />
-     <View style={{flexDirection:'row',width:'90%',}}>
+     <View style={{flexDirection:'row',width:'90%',        marginBottom:20}}>
     <TextInput
       label="Diagnois"
       mode='outlined'
