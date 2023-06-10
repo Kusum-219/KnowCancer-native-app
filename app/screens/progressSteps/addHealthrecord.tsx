@@ -3,15 +3,28 @@ import React from 'react'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import assets from '../../assets'
 import {TextInput,Button} from 'react-native-paper'
+import MIcon from 'react-native-vector-icons/SimpleLineIcons';
+import { RoutesConstant } from '../../navigators'
 
-const AddHealthRecord = ({handlePress}) => {
+const AddHealthRecord = ({handlePress,arrowBack,navigation}) => {
   return (
     <>
     <View style={{flexDirection:'row',justifyContent: 'space-between',marginHorizontal:10,marginVertical:20}}>
-    <Text style={{  fontWeight:'700'}}>
+        <View style={{flexDirection:'row',alignItems:'center'}}>
+        <TouchableOpacity onPress={arrowBack}>
+        <MIcon
+                // style={{marginLeft: 10,color:'red'}}
+                size={24}
+                name="arrow-left"
+                color={'black'}
+                style={{padding:15,}}
+              />
+        </TouchableOpacity>
+    <Text style={{  fontWeight:'700',color:'#131A42',fontSize:16}}>
         VIEW HEALTH RECORD
      </Text>
-     <TouchableOpacity style={{backgroundColor: '#936CAB',borderRadius:24,paddingVertical:12,paddingHorizontal:10,width:'30%',alignItems:'center'}} onPress={handlePress}>
+        </View>
+     <TouchableOpacity style={{backgroundColor: '#936CAB',borderRadius:24,paddingHorizontal:10,width:'30%',alignItems:'center',justifyContent:'center'}} onPress={handlePress}>
 <Text style={{color:'white'}}>+ Add New</Text>
      </TouchableOpacity>
     </View>
@@ -56,7 +69,7 @@ const AddHealthRecord = ({handlePress}) => {
         borderRadius:24
     }}
     labelStyle={{fontSize:20,fontWeight:'500',color:'white'}}
-    onPress={handlePress}
+    onPress={()=>navigation.navigate(RoutesConstant.HOME_PAGE)}
     />  
 </View>
       </KeyboardAwareScrollView>

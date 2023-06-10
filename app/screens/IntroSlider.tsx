@@ -11,12 +11,10 @@ import {
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import IconFeather from "react-native-vector-icons/Feather";
-import assets from "../../assets";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { RoutesConstant } from "../../navigators";
+import assets from "../assets";
 
-const HomeScreen = ({navigation}) => {
-  // const navigation = useNavigation();
+const IntroSlider = () => {
+  const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -29,22 +27,22 @@ const HomeScreen = ({navigation}) => {
       image: assets.introSlider,
       description:
         "Irure incididunt ex esse magna Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem  velit sint sit consectetur eiusmod sit Lorem.",
-      href:RoutesConstant.DIRECT_CONSULT,
+      href: "DirectConsult",
     },
     {
       title: "Video Guidance",
       image: assets.introSlider,
       description:
         " Irure incididunt ex esse magna Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem  velit sint sit consectetur eiusmod sit Lorem.",
-        href:RoutesConstant.DIRECT_CONSULT,
-      },
+      href: "DirectConsult",
+    },
     {
       title: "Chat & Consult",
       image: assets.introSlider,
       description:
         " Irure incididunt ex esse magna Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem  velit sint sit consectetur eiusmod sit Lorem.",
-        href:RoutesConstant.CHAT,
-      },
+      href: "Chat",
+    },
   ]);
 
   const renderItem = ({ item }) => (
@@ -82,14 +80,14 @@ const HomeScreen = ({navigation}) => {
         </View>
       </View>
       {/* ----------CONTENT------------- */}
-      <KeyboardAwareScrollView style={styles.container}>
+      <View style={styles.container}>
         {/*--------------------- SEARCHBAR------------------- */}
         <View
           style={styles.search}
-          // className="flex-row space-x-2 flex-1 border border-gray-300 rounded-lg items-center pr-2"
+          className="flex-row space-x-2 flex-1 border border-gray-300 rounded-lg items-center pr-2"
         >
-          <IconFeather name="search" size={20} color="#000000" />
-          <TextInput placeholder="Search" placeholderTextColor={'#000'} />
+          <IconFeather name="search" size={20} color="#000000 " />
+          <TextInput className="flex-1 p-2 " placeholder="Search" />
         </View>
         {/* ---------HEADING---------- */}
         <Text style={styles.title}>
@@ -130,12 +128,12 @@ const HomeScreen = ({navigation}) => {
             />
           </View>
         </View>
-      </KeyboardAwareScrollView>
+      </View>
     </View>
   );
 };
 
-export default HomeScreen;
+export default IntroSlider;
 
 const styles = StyleSheet.create({
   pageContainer: {
@@ -213,17 +211,15 @@ const styles = StyleSheet.create({
   search: {
     display: "flex",
     flexDirection: "row",
-    paddingHorizontal: 10,
+    padding: 10,
     marginVertical: 10,
     borderColor: "#000",
     borderWidth: 1,
     borderRadius: 10,
-    alignItems:'center'
   },
   title: {
     fontSize: 16,
     fontWeight: 600,
-    color:'#000'
   },
   carouselCard: {
     backgroundColor: "#936CAB",
@@ -249,7 +245,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 500,
     marginTop: 2,
-    color:'#000'
   },
   cardDescription: {
     color: "#938f99",
@@ -282,6 +277,5 @@ const styles = StyleSheet.create({
   blogTitle: {
     fontSize: 16,
     fontWeight: 500,
-    color:'#000'
   },
 });

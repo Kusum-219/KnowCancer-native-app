@@ -2,19 +2,22 @@ import { View, Text,Image,TouchableOpacity } from 'react-native'
 import React from 'react'
 import HeaderComponent from '../../components/headerComponent/header'
 import assets from '../../assets';
+import { RoutesConstant } from '../../navigators';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
   const DATA = [
     {
       title: 'My Profile',
-      icon: assets.person
+      icon: assets.person,
+      navigation:RoutesConstant.PROFILE_PAGES
     //   navigation:navigation.navigate(RoutesConstant.PROFILE_DESCRIPTION,{
     //     index:1
     //   })
     },
     {
       title: 'My Health Records',
-      icon: assets.healthRecord
+      icon: assets.healthRecord,
+      navigation:RoutesConstant.PROFILE_PAGES
     //   navigation:navigation.navigate(RoutesConstant.PROFILE_DESCRIPTION,{
     //     index:2
     //   })
@@ -28,12 +31,13 @@ const ProfileScreen = () => {
     // },
     {
       title: 'Supports',
-      icon: assets.support
-    //   navigation:navigation.navigate(RoutesConstant.PROFILE_DESCRIPTION,{index:4})
+      icon: assets.support,
+      navigation:RoutesConstant.PROFILE_PAGES
     },
   ];
   return (
-    <View style={{flex:1}}>
+    <View style={{flex:1, backgroundColor: "rgba(195, 136, 247, 0.2)",
+    backgroundOpacity: 0.1,}}>
       <HeaderComponent text={'Profile'}/>
       <View style={{flex:3,marginTop:20}}>
       <View style={{flexDirection:'row',alignItems:'center',marginLeft:15}}>
@@ -53,9 +57,8 @@ const ProfileScreen = () => {
    {DATA.map((item,index) => {
           return (
             <>
-              <TouchableOpacity style={{flexDirection: 'row',alignItems: 'center',marginVertical: 15,justifyContent:'space-between'}} onPress={()=> navigation.navigate(RoutesConstant.PROFILE_DESCRIPTION,{
-        index:index
-      })}>
+              <TouchableOpacity style={{flexDirection: 'row',alignItems: 'center',marginVertical: 15,justifyContent:'space-between'}} onPress={                   ()=> navigation.navigate(RoutesConstant.PROFILE_PAGES,{index})
+   }>
       <View style={{flexDirection:'row',alignItems:'center'}}>
      <View style={{
       height:35,width:35,
@@ -109,7 +112,7 @@ const ProfileScreen = () => {
 
    </View>
       </View>
-   <View style={ {flex:1,marginTop: 25,marginBottom:20,flexDirection:'row',alignItems:'center',marginHorizontal:25}}>
+   <TouchableOpacity style={ {flex:1,marginTop: 35,marginBottom:20,flexDirection:'row',alignItems:'center',marginHorizontal:25}} onPress={()=>navigation.navigate(RoutesConstant.LOGIN)}>
 <View style={{
       height:35,width:35,
       backgroundColor:'#936CAB',
@@ -123,7 +126,7 @@ const ProfileScreen = () => {
         />
         </View>
           <Text style={{marginLeft: 15,fontSize:16,color:'black',fontWeight:'500'}}>Logout</Text>
-        </View>
+        </TouchableOpacity>
       {/* <Text>profileScreen</Text> */}
     </View>
   )

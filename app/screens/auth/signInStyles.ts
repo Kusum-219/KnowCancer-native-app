@@ -3,6 +3,8 @@ import {StyleSheet} from 'react-native';
 export const loginStyles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "rgba(195, 136, 247, 0.2)",
+    backgroundOpacity: 0.1,
     // backgroundColor:'',
 
     // justifyContent: 'center',
@@ -10,7 +12,7 @@ export const loginStyles = StyleSheet.create({
   },
   contentContainer:{
     // flex:1,
-    marginTop:10
+    marginTop:40
 
     // position:'relative'
   },

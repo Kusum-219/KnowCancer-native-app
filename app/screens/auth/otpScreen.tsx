@@ -10,10 +10,10 @@ import { RoutesConstant } from '../../navigators';
 
 interface OtpScreenProps {}
 
-const OtpScreen = ({navigation}: OtpScreenProps) => {
+const OtpScreen = ({navigation,route}: OtpScreenProps) => {
   const styles = loginStyles;
   const signUpScreen= false;
-
+const{login}=route?.params
   const [timeLeft, setTimeLeft] = useState(30);
   let timer = () => {};
 
@@ -81,10 +81,16 @@ const OtpScreen = ({navigation}: OtpScreenProps) => {
       </View>
       <View>
      <TouchableOpacity style={{width:'60%',paddingVertical:12,backgroundColor:'#936DAC',borderRadius:24,alignItems:'center',alignContent:'center',alignSelf:'center'}} onPress={()=>{
-      navigation.navigate(RoutesConstant.PROGRESSTEPS)
-     }}>
+            if (login) {
+              navigation.navigate(RoutesConstant.HOME_PAGE)
+            }else{
+              navigation.navigate(RoutesConstant.PROGRESSTEPS)
+
+            }
+
+}}>
         <Text style={{fontSize:20,color:'#fff'}}>
-            Login
+           {login? 'Login':'SignUp'}
         </Text>
      </TouchableOpacity>
       </View>

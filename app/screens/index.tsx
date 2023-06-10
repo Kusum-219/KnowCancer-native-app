@@ -57,15 +57,22 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
           <AddHealthRecord
             handlePress={() => {
               setIndex(2), setHeaderName('Health Record');
-              navigation.navigate(RoutesConstant.HOME_PAGE)
+            //   navigation.navigate(RoutesConstant.)
             }}
             navigation={navigation}
+            arrowBack={
+                ()=>{
+                    setIndex(1),
+                    setHeaderName('Health Record')
+
+                }
+            }
           />
         );
       case 2:
         return (
           <UploadRecord
-            handlePress={() => setIndex('healthRecord')}
+            // handlePress={() => setIndex('healthRecord')}
             navigation={navigation}
           />
         );
@@ -86,7 +93,8 @@ setIndex(1)
     }
   }
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: "rgba(195, 136, 247, 0.2)",
+    backgroundOpacity: 0.1,}}>
       {headerName == 'View Health Record' ? null : (
         <>
           <HeaderComponent text={headerName} handleBackPress={handlePress} />

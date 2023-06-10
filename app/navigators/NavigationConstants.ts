@@ -7,6 +7,13 @@ const RoutesConstant: {[key: string]: keyof NavigatorParamList} = {
   HOME_PAGE:'homePage',
   CHAT_PAGE:'chatPage',
   SETTING_PAGE:'settingPage',
+  INTROSLIDER:'introSlider',
+  PROFILE_PAGES:'profilePages',
+  DOCTORS:'doctors',
+  DIRECT_CONSULT:'directDoctors',
+  CHAT:'chat',
+  VERIFY_DOCTOR:'verifyDoctor',
+  SIGNUP:'signUp'
 };
 
 export default RoutesConstant;

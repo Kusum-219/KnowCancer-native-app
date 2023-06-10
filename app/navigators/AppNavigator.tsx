@@ -28,6 +28,15 @@ import ProfileScreen from '../screens/mainScreens/profileScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/AntDesign';
 import OcticonsIcons from 'react-native-vector-icons/Octicons';
 import assets from '../assets';
+import IntroSlider from '../screens/IntroSlider';
+import SupportTicket from '../screens/mainScreens/SupportTicket';
+import HomeScreen from '../screens/mainScreens/firstScreen';
+import Doctors from '../screens/mainScreens/Doctors';
+import DirectConsult from '../screens/mainScreens/DirectConsult';
+import Chat from '../screens/mainScreens/Chat';
+import VerifyDoctorCode from '../screens/mainScreens/VerifyDoctorCode';
+import ProfileIndex from '../screens/mainScreens/profileIndex';
+import SignUp from '../screens/auth/signUpScreen';
 
 // import PickerComponent from '@/components/picker/PickerComponent';
 // import {useAuthContext} from '@/screens/auth/AuthContext';
@@ -65,7 +74,7 @@ function MyTabs() {
       }}>
       <Tab.Screen
         name={RoutesConstant.HOME_PAGE}
-        component={firstScreen}
+        component={HomeScreen}
         options={{
           tabBarIcon: ({color, size, focused}) =>{
             return (
@@ -132,7 +141,7 @@ function MyTabs() {
       />
       <Tab.Screen
         name={RoutesConstant.CHAT_PAGE}
-        component={secondScreen}
+        component={Chat}
         options={{
           tabBarIcon: ({color, size, focused}) =>{
             return (
@@ -271,9 +280,12 @@ const AppStack = ({theme}: AppStackProps) => {
         //   lineHeight: 35,
         // },
       })}
-      initialRouteName={RoutesConstant.HOME_PAGE}>
+      initialRouteName={RoutesConstant.LOGIN}>
       <Stack.Group>
+      {/* <Stack.Screen name={RoutesConstant.INTROSLIDER} component={IntroSlider} /> */}
         <Stack.Screen name={RoutesConstant.LOGIN} component={SignIn} />
+        <Stack.Screen name={RoutesConstant.SIGNUP} component={SignUp} />
+
         <Stack.Screen name={RoutesConstant.OTP} component={OtpScreen} />
         <Stack.Screen
           name={RoutesConstant.PROGRESSTEPS}
@@ -283,6 +295,27 @@ const AppStack = ({theme}: AppStackProps) => {
           name={RoutesConstant.HOME_PAGE}
           component={MyTabs}
           options={{headerShown: false}}
+        />
+          <Stack.Screen
+          name={RoutesConstant.DIRECT_CONSULT}
+          component={DirectConsult}
+        />
+         <Stack.Screen
+          name={RoutesConstant.DOCTORS}
+          component={Doctors}
+        />
+       
+         <Stack.Screen
+          name={RoutesConstant.CHAT}
+          component={Chat}
+        />
+          <Stack.Screen
+          name={RoutesConstant.VERIFY_DOCTOR}
+          component={VerifyDoctorCode}
+        />
+        <Stack.Screen
+          name={RoutesConstant.PROFILE_PAGES}
+          component={ProfileIndex}
         />
         {/* <Stack.Screen
           name={RoutesConstant.HEALTHRECORD}

@@ -5,7 +5,7 @@ import {TextInput,Button} from 'react-native-paper'
 import MIcon from 'react-native-vector-icons/AntDesign';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-const UploadRecord = () => {
+const UploadRecord = ({handlePress}) => {
   return (
     <View style={{flex:1}}>
         <View style={{
@@ -101,6 +101,7 @@ alignSelf:'flex-end',position: 'absolute',padding:18,
         
     }}
     labelStyle={{fontSize:20,fontWeight:'500',color:'white'}}
+    onPress={handlePress}
     />
          </View>
 </KeyboardAwareScrollView>
