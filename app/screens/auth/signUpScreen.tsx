@@ -6,12 +6,14 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {loginStyles} from './signInStyles';
 import assets from '../../assets';
 import HeaderComponent from '../../components/headerComponent/header';
 import {RoutesConstant} from '../../navigators';
 import { Button } from 'react-native-paper';
+import {  sendOtpApi } from '../../services/Auth';
 
 interface SignInProps {
   navigation?: any;
@@ -20,11 +22,38 @@ interface SignInProps {
 const SignUp = ({navigation,route}: SignInProps) => {
   const styles = loginStyles;
   console.log(route?.params,'route');
+  const [phoneNumber, setPhoneNumber] = React.useState()
+
   // const {signUpScreen}=route?.params
   // const [isSignUp, setIsSignUp] = React.useState(false)
   const signUpScreen = false;
   console.log(signUpScreen,'signUpScreen');
   // const {signUpScreen}=route?.params
+  const sendOtp = ()=>{
+    sendOtpApi({
+      strategy:"phoneOtp",
+      action:"signup",
+      phone:phoneNumber,
+    }).then((result) => {
+      console.log(result?.data?.message,'result?.data?.message');
+      if (result?.data?.message) {
+        navigation.navigate(RoutesConstant.OTP,{
+          login:false,
+          phoneNumber:phoneNumber
+        })
+          
+      }
+      
+    }).catch((err) => {
+      console.log(err?.response,'err');
+      Alert.alert('Error',err?.response?.data?.message || 'Enter valid number', [
+       
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+    });
+    // {
+     
+  }
   return (
     <View style={styles.container}>
       <HeaderComponent />
@@ -59,6 +88,10 @@ const SignUp = ({navigation,route}: SignInProps) => {
               placeholderTextColor={'#999999'}
               placeholder="Enter Mobile No."
               keyboardType="number-pad"
+              onChangeText={(e)=>{
+                setPhoneNumber(e)
+              }}
+              maxLength={10}
             />
             <Text
               style={{
@@ -76,12 +109,7 @@ const SignUp = ({navigation,route}: SignInProps) => {
 
        <Button 
         children='Send Otp'
-        onPress={()=>{
-          navigation.navigate(RoutesConstant.OTP,{
-            login:false
-          });
-
-        }}
+        onPress={()=>sendOtp()}
         contentStyle={{
             backgroundColor:'#936DAC',
             width:'90%',

@@ -8,12 +8,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import IconFeather from "react-native-vector-icons/Feather";
 import assets from "../../assets";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RoutesConstant } from "../../navigators";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = ({navigation}) => {
   // const navigation = useNavigation();
@@ -22,7 +23,11 @@ const HomeScreen = ({navigation}) => {
       headerShown: false,
     });
   }, []);
-
+  const [userInfo, setUserInfo] = useState()
+  useEffect(() => {
+    AsyncStorage.getItem('UserInfo').then(r=> setUserInfo(r));
+  }, [])
+  console.log(userInfo,'userInfo');
   const [carouselData, setCarouselData] = useState([
     {
       title: "Direct Consult",

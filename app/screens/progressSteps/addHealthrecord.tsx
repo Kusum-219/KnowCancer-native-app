@@ -6,7 +6,8 @@ import {TextInput,Button} from 'react-native-paper'
 import MIcon from 'react-native-vector-icons/SimpleLineIcons';
 import { RoutesConstant } from '../../navigators'
 
-const AddHealthRecord = ({handlePress,arrowBack,navigation}) => {
+const AddHealthRecord = ({handlePress,arrowBack,navigation,image,handleHealthRecord}) => {
+     // const image= false
   return (
     <>
     <View style={{flexDirection:'row',justifyContent: 'space-between',marginHorizontal:10,marginVertical:20}}>
@@ -24,39 +25,35 @@ const AddHealthRecord = ({handlePress,arrowBack,navigation}) => {
         VIEW HEALTH RECORD
      </Text>
         </View>
-     <TouchableOpacity style={{backgroundColor: '#936CAB',borderRadius:24,paddingHorizontal:10,width:'30%',alignItems:'center',justifyContent:'center'}} onPress={handlePress}>
+     {image && <TouchableOpacity style={{backgroundColor: '#936CAB',borderRadius:24,paddingHorizontal:10,width:'30%',alignItems:'center',justifyContent:'center'}} onPress={handleHealthRecord}>
 <Text style={{color:'white'}}>+ Add New</Text>
-     </TouchableOpacity>
+     </TouchableOpacity>}
     </View>
+    {!image &&<TouchableOpacity style={{backgroundColor: '#936CAB',borderRadius:34,paddingHorizontal:10,width:'30%',alignItems:'center',justifyContent:'center',height:100,width:'60%',alignSelf:'center'}} onPress={handleHealthRecord}>
+<Text style={{color:'white'}}>+ Add Health Record</Text>
+     </TouchableOpacity>}
     <KeyboardAwareScrollView style={{}}>
-   <View style={{paddingHorizontal:22,flexDirection:'row',justifyContent:'space-between',marginHorizontal:10,marginVertical:10}}>
+
+{
+   image &&    <>
+       <View style={{paddingHorizontal:22,flexDirection:'row',justifyContent:'space-between',marginHorizontal:10,marginVertical:10}}>
      <Text style={{color:'#999999',fontSize:15}}>Updated On</Text>
-<Text style={{color:'black',fontSize:15,fontWeight:'500'}}>23.03.202</Text>
+<Text style={{color:'black',fontSize:15,fontWeight:'500'}}>{ new Date().toLocaleDateString()}</Text>
 
      </View>
     
      <View style={{width:'100%',}}>
      <Image
-     source={assets.record}
+     source={{uri:image}}
      style={{height:400,width:'100%'}}
      resizeMode='contain'
      />
 </View>
+     </>
+}
 
     
-<View style={{paddingHorizontal:22,flexDirection:'row',justifyContent:'space-between',marginHorizontal:10,marginVertical:10}}>
-     <Text style={{color:'#999999',fontSize:15}}>Updated On</Text>
-<Text style={{color:'black',fontSize:15,fontWeight:'500'}}>23.03.202</Text>
 
-     </View>
-    
-     <View style={{width:'100%',}}>
-     <Image
-     source={assets.record}
-     style={{height:400,width:'100%'}}
-     resizeMode='contain'
-     />
-</View>
     
     
 <View  style={{marginVertical:20,alignSelf:'center'}}>
@@ -69,7 +66,7 @@ const AddHealthRecord = ({handlePress,arrowBack,navigation}) => {
         borderRadius:24
     }}
     labelStyle={{fontSize:20,fontWeight:'500',color:'white'}}
-    onPress={()=>navigation.navigate(RoutesConstant.HOME_PAGE)}
+    onPress={handlePress}
     />  
 </View>
       </KeyboardAwareScrollView>

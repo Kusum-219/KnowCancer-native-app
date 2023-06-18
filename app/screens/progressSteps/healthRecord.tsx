@@ -6,6 +6,7 @@ import {
   Image,
   //   TextInput,
   TouchableOpacity,
+  Alert
 } from 'react-native';
 import {progressSteps} from '../progressSteps/styles';
 import assets from '../../assets';
@@ -16,23 +17,50 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MIcon from 'react-native-vector-icons/AntDesign';
+import { diagnosisManagement } from '../../services/Auth';
 
 interface HealthRecordProps {
   navigation?: any;
 }
 
-const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
+const HealthRecord = ({navigation, route, handlePress,language, setLanguage,height, setHeight,weight, setWeight,underTreatment, setUnderTreatment,newcase, setNewCase,diagnosis, setDiagnosis,stage, setStage,bloodGroup, setBloodGroup}: HealthRecordProps) => {
   const styles = progressSteps;
   console.log(route?.params, 'route');
-  const [checked, setChecked] = React.useState('Yes');
-
-  const Language = ['Delhi', 'Surat'];
+  const [diagnosisData, setDiagnosisData] = React.useState();
+// console.log(language,'====');
+  const Language = ['Hindi', 'English'];
   const Height = ['150cm', '160cm'];
   const Weight = ['40kg', '50kg'];
-  const BloodGroup = ['0+', 'A+'];
+  const BloodGroup = ['A+', 'A-','B+','B-','AB+','AB-','0+','0-'];
   const Diagnosis = ['Diagnois1', 'Diagnois2'];
-  const Stage = ['Stage1', 'Stage2'];
+  const Stage = ['Stage 1', 'Stage 2','Stage 3','Stage 4'];
+React.useEffect(() => {
+  diagnosisManagement().then(r=>{
+    setDiagnosisData(r?.data?.data)
+    console.log(r?.data?.data,'diagnosis data');
+  })
+}, [])
+const AlertPopUp = (alertVal)=>{
+  Alert.alert('Error',`${alertVal} is required` || 'The field is required', [
+     
+    {text: 'OK', onPress: () => console.log('OK Pressed')},
+  ])
+}
+const onHandlePress =()=>{
+  // handlePress()
 
+  if (!language) {
+   return AlertPopUp('Language')
+  }else if (!bloodGroup){
+    return AlertPopUp('Blood-Group')
+  }else if (!height){
+    return AlertPopUp('Height')
+  }else if (!weight){
+    return AlertPopUp('Weight')
+  }else{
+    handlePress()
+  }
+}
   //   const signUpScreen = false;
   // const {signUpScreen}=route?.params
 
@@ -42,6 +70,7 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
         <SelectDropdown
           data={Language}
           onSelect={(selectedItem, index) => {
+            setLanguage(index+1)
             console.log(selectedItem, index);
           }}
           buttonTextAfterSelection={(selectedItem, index) => {
@@ -87,14 +116,6 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
             );
           }}
         />
-        <TextInput
-          label="Update Your Health Record"
-          mode="outlined"
-          style={{
-            width: '90%',
-            marginBottom: 20,
-          }}
-        />
         {/* <TextInput
       label="Phone Number"
       mode='outlined'
@@ -107,105 +128,31 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
             flexDirection: 'row',
             width: '90%',
             justifyContent: 'space-between',
-            // marginBottom: 20,
+            marginBottom: 20,
           }}>
-          <SelectDropdown
-            data={Height}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-            }}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              // text represented after item is selected
-              // if data array is an array of objects then return selectedItem.property to render after item is selected
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              // text represented for each item in dropdown
-              // if data array is an array of objects then return item.property to represent item in dropdown
-              return item;
-            }}
-            defaultValue={'Height'}
-            defaultButtonText="Height"
-            dropdownStyle={
-              {
-                // width:'80%',
-              }
-            }
-            buttonStyle={{
-              width: '30%',
-              backgroundColor: 'white',
-              borderRadius: 8,
-              borderColor: '#6750A4',
-              borderWidth: 1,
-              marginBottom: 20,
-            }}
-            // renderCustomizedRowChild={
-            //   <AppText.Text>hh</AppText.Text>
-            // }
-            // renderDropdownIcon={isOpened => {
-            //   return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18} />;
-            // }}
-            renderCustomizedButtonChild={(selectedItem, index) => {
-              console.log(selectedItem, 'selectedItem');
-              return (
-                <View style={styles.dropdown3BtnChildStyle}>
-                  <Text style={styles.dropdown3BtnTxt}>
-                    {selectedItem ? selectedItem : 'Height'}
-                  </Text>
-                  <FontAwesome name="chevron-down" color={'#444'} size={18} />
-                </View>
-              );
-            }}
-          />
-          <SelectDropdown
-            data={Weight}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-            }}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              // text represented after item is selected
-              // if data array is an array of objects then return selectedItem.property to render after item is selected
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              // text represented for each item in dropdown
-              // if data array is an array of objects then return item.property to represent item in dropdown
-              return item;
-            }}
-            defaultValue={'Weight'}
-            defaultButtonText="Weight"
-            dropdownStyle={
-              {
-                // width:'80%',
-              }
-            }
-            buttonStyle={{
-              width: '30%',
-              backgroundColor: 'white',
-              borderRadius: 8,
-              borderColor: '#6750A4',
-              borderWidth: 1,
-              marginBottom: 20,
-            }}
-            // renderCustomizedRowChild={
-            //   <AppText.Text>hh</AppText.Text>
-            // }
-            // renderDropdownIcon={isOpened => {
-            //   return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18} />;
-            // }}
-            renderCustomizedButtonChild={(selectedItem, index) => {
-              console.log(selectedItem, 'selectedItem');
-              return (
-                <View style={styles.dropdown3BtnChildStyle}>
-                  <Text style={styles.dropdown3BtnTxt}>
-                    {selectedItem ? selectedItem : 'Weight'}
-                  </Text>
-                  <FontAwesome name="chevron-down" color={'#444'} size={18} />
-                </View>
-              );
-            }}
-          />
-          <SelectDropdown
+         <TextInput
+      label="Height"
+      mode='outlined'
+      style={{
+        width:'45%'
+      }}
+      value={height}
+      onChangeText={(e)=>{
+        setHeight(e)
+      }}
+    />
+    <TextInput
+      label="Weight"
+      mode='outlined'
+      style={{
+        width:'45%'
+      }}
+      value={weight}
+      onChangeText={(e)=>{
+        setWeight(e)
+      }}
+    />
+          {/* <SelectDropdown
             data={BloodGroup}
             onSelect={(selectedItem, index) => {
               console.log(selectedItem, index);
@@ -252,16 +199,65 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
                 </View>
               );
             }}
-          />
+          /> */}
         </View>
+        <SelectDropdown
+            data={BloodGroup}
+            onSelect={(selectedItem, index) => {
+              setBloodGroup(index+1)
+              console.log(selectedItem, index);
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+            defaultValue={'BloodGroup'}
+            defaultButtonText="BloodGroup"
+            dropdownStyle={
+              {
+                // width:'80%',
+              }
+            }
+            buttonStyle={{
+              width: '90%',
+              backgroundColor: 'white',
+              borderRadius: 8,
+              borderColor: '#6750A4',
+              borderWidth: 1,
+              marginBottom: 20,
+            }}
+            // renderCustomizedRowChild={
+            //   <AppText.Text>hh</AppText.Text>
+            // }
+            // renderDropdownIcon={isOpened => {
+            //   return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18} />;
+            // }}
+            renderCustomizedButtonChild={(selectedItem, index) => {
+              console.log(selectedItem, 'selectedItem');
+              return (
+                <View style={styles.dropdown3BtnChildStyle}>
+                  <Text style={styles.dropdown3BtnTxt}>
+                    {selectedItem ? selectedItem : 'BloodGroup'}
+                  </Text>
+                  <FontAwesome name="chevron-down" color={'#444'} size={18} />
+                </View>
+              );
+            }}
+          />
         <View style={{backgroundColor:'white',width:'90%',marginBottom:20,borderRadius:8,borderWidth:1,borderColor:'#6750A4',paddingHorizontal:10}}>
         <Text style={{color:'#936DAC'}}>Are you under Treatment?</Text>
         <View style={{flexDirection:'row',justifyContent:'space-between',width:'85%'}}>
      <View style={{flexDirection:'row',alignItems:'center'}}>
      <RadioButton
         value="Yes"
-        status={ checked === 'Yes' ? 'checked' : 'unchecked' }
-        onPress={() => setChecked('Yes')}
+        status={ underTreatment == true? 'checked' : 'unchecked' }
+        onPress={() => setUnderTreatment(true)}
 
       />
                   <Text>Yes</Text>
@@ -270,8 +266,8 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
 
       <RadioButton
         value="No"
-        status={ checked === 'No' ? 'checked' : 'unchecked' }
-        onPress={() => setChecked('No')}
+        status={ underTreatment ==false ? 'checked' : 'unchecked' }
+        onPress={() => setUnderTreatment(false)}
       />
                   <Text>No</Text>
                   </View>
@@ -293,22 +289,27 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
             width: '90%',
             marginBottom: 20,
           }}
+          value={newcase}
+          onChangeText={e=>{
+            setNewCase(e)
+          }}
         />
-        <View style={{flexDirection: 'row', width: '90%', marginBottom: 20}}>
+        {/* <View style={{flexDirection: 'row', width: '90%', marginBottom: 20}}> */}
           <SelectDropdown
-            data={Diagnosis}
+            data={diagnosisData}
             onSelect={(selectedItem, index) => {
+              setDiagnosis(selectedItem)
               console.log(selectedItem, index);
             }}
             buttonTextAfterSelection={(selectedItem, index) => {
               // text represented after item is selected
               // if data array is an array of objects then return selectedItem.property to render after item is selected
-              return selectedItem;
+              return selectedItem?.name;
             }}
             rowTextForSelection={(item, index) => {
               // text represented for each item in dropdown
               // if data array is an array of objects then return item.property to represent item in dropdown
-              return item;
+              return item?.name;
             }}
             defaultValue={'Diagnosis'}
             defaultButtonText="Diagnosis"
@@ -318,7 +319,7 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
               }
             }
             buttonStyle={{
-              width: '35%',
+              width: '90%',
               backgroundColor: 'white',
               borderRadius: 8,
               borderColor: '#6750A4',
@@ -336,7 +337,7 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
               return (
                 <View style={styles.dropdown3BtnChildStyle}>
                   <Text style={styles.dropdown3BtnTxt}>
-                    {selectedItem ? selectedItem : 'Diagnosis'}
+                    {selectedItem ? selectedItem?.name : 'Diagnosis'}
                   </Text>
                   <FontAwesome name="chevron-down" color={'#444'} size={18} />
                 </View>
@@ -347,6 +348,7 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
             data={Stage}
             onSelect={(selectedItem, index) => {
               console.log(selectedItem, index);
+              setStage(index+1)
             }}
             buttonTextAfterSelection={(selectedItem, index) => {
               // text represented after item is selected
@@ -366,13 +368,13 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
               }
             }
             buttonStyle={{
-              width: '35%',
+              width: '90%',
               backgroundColor: 'white',
               borderRadius: 8,
               borderColor: '#6750A4',
               borderWidth: 1,
               marginBottom: 20,
-              marginRight: 22,
+              // marginRight: 22,
             }}
             // renderCustomizedRowChild={
             //   <AppText.Text>hh</AppText.Text>
@@ -392,7 +394,7 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
               );
             }}
           />
-        </View>
+        {/* </View> */}
         <View style={{marginVertical: 30}}>
           <Button
             children={'Submit'}
@@ -403,7 +405,7 @@ const HealthRecord = ({navigation, route, handlePress}: HealthRecordProps) => {
               borderRadius: 24,
             }}
             labelStyle={{fontSize: 20, fontWeight: '500', color: 'white'}}
-            onPress={handlePress}
+            onPress={()=>onHandlePress()}
           />
         </View>
         {/* <HeaderComponent  text={'Basic Details'}/> */}
