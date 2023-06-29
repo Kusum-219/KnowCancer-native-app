@@ -32,7 +32,8 @@ const ProfileIndex = ({navigation,route}) => {
         }
       };
   return (
-    <View>
+    <View style={{ backgroundColor: 'rgba(195, 136, 247, 0.2)',
+    backgroundOpacity: 0.1,flex:1}}>
         {renderComponent()}
       {/* <Text>ProfileIndex</Text> */}
     </View>

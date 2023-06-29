@@ -57,10 +57,12 @@ const OtpScreen = ({navigation, route}: OtpScreenProps) => {
         phone: phoneNumber,
         otp: otp,
         role: 3,
+        deviceType:1
       })
         .then(result => { 
 if (result?.data) {
   console.log(result?.data, 'verify data in login');
+  AsyncStorage.setItem('accessToken', result?.data?.accessToken);
 
   AsyncStorage.setItem('UserInfo', JSON.stringify(result?.data));
 
@@ -82,6 +84,7 @@ if (result?.data) {
         phone: phoneNumber,
         otp: otp,
         role: 3,
+        deviceType:1
       })
         .then(result => { 
 if  (result?.data)  {

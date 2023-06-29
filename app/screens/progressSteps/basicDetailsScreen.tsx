@@ -61,7 +61,6 @@ console.log(name,email,phoneNumber,gender,date,address,stateSelect,citySelect,pi
     // {key:'7', value:'Drinks'},
 ]
   useEffect(() => {
-    AsyncStorage.getItem('RegistrationToken').then(r=> console.log(r,'rrrrr 40 token'));
     allState().then(r=>{
       setStateData(r?.data?.data)
       // console.log(r?.data?.data,'r 43');
@@ -79,24 +78,24 @@ console.log(name,email,phoneNumber,gender,date,address,stateSelect,citySelect,pi
 const onHandlePress =()=>{
   // handlePress()
 
-  if (!name) {
-   return AlertPopUp('Name')
-  }else if (!phoneNumber){
-    return AlertPopUp('Phone Number')
-  }else if (!gender){
-    return AlertPopUp('Gender')
-  }else if (!date){
-    return AlertPopUp('DOB')
-  }else if (!stateSelect){
-    return AlertPopUp('State')
-  }else if (!citySelect){
-    return AlertPopUp('City')
-  }
-  else if (!pincode){
-    return AlertPopUp('Pincode')
-  }else{
+  // if (!name) {
+  //  return AlertPopUp('Name')
+  // }else if (!phoneNumber){
+  //   return AlertPopUp('Phone Number')
+  // }else if (!gender){
+  //   return AlertPopUp('Gender')
+  // }else if (!date){
+  //   return AlertPopUp('DOB')
+  // }else if (!stateSelect){
+  //   return AlertPopUp('State')
+  // }else if (!citySelect){
+  //   return AlertPopUp('City')
+  // }
+  // else if (!pincode){
+  //   return AlertPopUp('Pincode')
+  // }else{
     handlePress()
-  }
+  // }
 }
   const Gender = [
  'Male',

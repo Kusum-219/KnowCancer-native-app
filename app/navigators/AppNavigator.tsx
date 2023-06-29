@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -37,6 +37,7 @@ import Chat from '../screens/mainScreens/Chat';
 import VerifyDoctorCode from '../screens/mainScreens/VerifyDoctorCode';
 import ProfileIndex from '../screens/mainScreens/profileIndex';
 import SignUp from '../screens/auth/signUpScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import PickerComponent from '@/components/picker/PickerComponent';
 // import {useAuthContext} from '@/screens/auth/AuthContext';
@@ -174,7 +175,7 @@ function MyTabs() {
             />
              
               </ImageBackground>
-              <Text style={{fontWeight:'500',color:'black'}}>Home</Text>
+              <Text style={{fontWeight:'500',color:'black'}}>Chat</Text>
              </View>
               </ImageBackground>
               :
@@ -263,6 +264,19 @@ function MyTabs() {
     </Tab.Navigator>
   );
 }
+// let authenticated;
+useEffect(() => {
+  let authenticated;
+
+  const token = async ()=>{
+    authenticated = await AsyncStorage.getItem('accessToken').then(r=>{return r});
+ console.log(authenticated,'authenticatedauthenticated');
+  }
+  token()
+ 
+}, [])
+// console.log(authenticated,'outside');
+
 const AppStack = ({theme}: AppStackProps) => {
   return (
     <Stack.Navigator
@@ -280,18 +294,19 @@ const AppStack = ({theme}: AppStackProps) => {
         //   lineHeight: 35,
         // },
       })}
-      initialRouteName={RoutesConstant.LOGIN}>
-      <Stack.Group>
-      {/* <Stack.Screen name={RoutesConstant.INTROSLIDER} component={IntroSlider} /> */}
+      initialRouteName={RoutesConstant.INTROSLIDER}>
+          <Stack.Group>
+
+      <Stack.Screen name={RoutesConstant.INTROSLIDER} component={IntroSlider} />
         <Stack.Screen name={RoutesConstant.LOGIN} component={SignIn} />
         <Stack.Screen name={RoutesConstant.SIGNUP} component={SignUp} />
-
         <Stack.Screen name={RoutesConstant.OTP} component={OtpScreen} />
         <Stack.Screen
           name={RoutesConstant.PROGRESSTEPS}
           component={ProgressSteps}
         />
-        <Stack.Screen
+    
+      <Stack.Screen
           name={RoutesConstant.HOME_PAGE}
           component={MyTabs}
           options={{headerShown: false}}
@@ -317,14 +332,6 @@ const AppStack = ({theme}: AppStackProps) => {
           name={RoutesConstant.PROFILE_PAGES}
           component={ProfileIndex}
         />
-        {/* <Stack.Screen
-          name={RoutesConstant.HEALTHRECORD}
-          component={OtpScreen}
-        />
-         <Stack.Screen
-          name={RoutesConstant.UPLOADHEALTHRECORD}
-          component={OtpScreen}
-        /> */}
       </Stack.Group>
     </Stack.Navigator>
   );

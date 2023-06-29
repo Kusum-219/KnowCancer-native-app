@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TextInput,
-  Alert,
-} from 'react-native';
+import {Text, View, StyleSheet, Image, TextInput, Alert} from 'react-native';
 import {progressSteps} from './progressSteps/styles';
 import assets from '../../assets';
 import HeaderComponent from '../components/headerComponent/header';
@@ -48,7 +41,7 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
   const [diagnosis, setDiagnosis] = React.useState('');
   const [stage, setStage] = React.useState('');
   const [bloodGroup, setBloodGroup] = React.useState('');
-  const [image, setImage] = React.useState('');
+  const [image, setImage] = React.useState([]);
   const [pincode, setPincode] = React.useState();
   let dateVal =
     (date.getMonth() > 8 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)) +
@@ -57,21 +50,104 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
     '/' +
     date.getFullYear();
   console.log(dateVal, '5444');
-  const uploadRecord = () => {
-    profileUpload({
-      files: image,
-      fileType: '1',
-      purpose: 'profile',
-    })
+  console.log(typeof Number(phoneNumber), 'pppp');
+  console.log(image, 'image in index file');
+
+  const attachmentsUpload = async blob => {
+    const token = await AsyncStorage.getItem('RegistrationToken').then(r => {
+      return r;
+    });
+
+    var formdata = new FormData();
+    // formdata.append("file", blob);
+    image.map(item => formdata.append('file', item));
+    // formdata.append("file", image)
+    formdata.append('type', '1');
+    formdata.append('purpose', 'surgeon');
+
+    console.log({formdata});
+    // setAttachmentsUploading(true);
+
+    var requestOptions = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formdata,
+      redirect: 'follow',
+    };
+    await fetch('http://3.110.179.66:3030/v1/upload-media', requestOptions)
+      .then(response => response.json())
       .then(result => {
-        console.log(result, 'result');
+        console.log(result, 'result 86 line');
+        // console.log(result.map((item) => item.link));
+        // setAttachmentsUrl(result.map((item) => item.link));
+        // setAttachmentsThumbnailsUrl(result.map((item) => item.thumbnail));
+        // setAttachmentsMetadata(result.map((item) => item.metadata));
+        // setAttachmentsUploading(false);
       })
-      .catch(err => console.log(err?.response, 'errrrr 38 line'));
-    setIndex('healthRecord');
-    setHeaderName('View Health Record');
+      .catch(error => {
+        console.log('error', error);
+        // setAttachmentsUploading(false);
+      });
   };
 
-console.log(underTreatment,'-----',diagnosis?._id,'87777777777');
+  const uploadRecord = async () => {
+    setIndex('healthRecord'), setHeaderName('View Health Record');
+
+    const token = await AsyncStorage.getItem('RegistrationToken').then(r => {
+      return r;
+    });
+    console.log(token, 'tokennnnn');
+    var formdata = new FormData();
+    image.map(item => formdata.append('files', item));
+    formdata.append('fileType', 1);
+    formdata.append('purpose', 'profile');
+    console.log(image, 'image in 103');
+    var requestOptions = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formdata,
+    };
+
+    // await profileUpload(requestOptions)
+    //   .then(result => {
+    //     setIndex('healthRecord');
+    //     setHeaderName('View Health Record');
+    //     console.log(result, 'result');
+    //   })
+    //   .catch(err => console.log(err?.response, 'errrrr 38 line'));
+
+    // await fetch('http://3.110.179.66:3030/v1/upload', requestOptions)
+    // .then((response) => console.log(response.json(),'json'))
+    // .then((result) => {
+    //   console.log(result,'rrrrrrrrrrrrrrrrr1188888');
+    //   console.log(result.map((item) => item.link));
+    //   // setAttachmentsUrl(result.map((item) => item.link));
+    //   // setAttachmentsThumbnailsUrl(result.map((item) => item.thumbnail));
+    //   // setAttachmentsMetadata(result.map((item) => item.metadata));
+    //   // setAttachmentsUploading(false);
+    // })
+    // .catch((error) => {
+    //   console.log("error", error?.response);
+    //   // setAttachmentsUploading(false);
+    // });
+    // attachmentsUpload()
+  };
+  console.log(typeof stateSelect?._id, 'stateSelect?._id');
+  console.log(
+    underTreatment,
+    '-----',
+    diagnosis?._id,
+    '87777777777',
+    stage,
+    '666',
+    diagnosis?._id,
+    '666',
+    gender,
+  );
   const registrationFlow = async () => {
     const token = await AsyncStorage.getItem('RegistrationToken').then(r => {
       return r;
@@ -82,7 +158,7 @@ console.log(underTreatment,'-----',diagnosis?._id,'87777777777');
     userManagement({
       registrationToken: token,
       name: name,
-      phone: phoneNumber,
+      phone: Number(phoneNumber),
       role: 3,
       gender: 1, // how to describe male,female
       dob: dateVal,
@@ -90,27 +166,31 @@ console.log(underTreatment,'-----',diagnosis?._id,'87777777777');
       city: citySelect?._id,
       pincode: pincode,
       state: stateSelect?._id,
-      language: 1, // same above
+      language: language, // same above
       healthRecord: [
         'https://vitmeds-dev.s3.ap-south-1.amazonaws.com/profile/2023/0527/1685204381954_1674828761748_full-body-checkup-bapa.pdf',
       ],
       height: height,
       weight: weight,
-      bloodGroup: 1, // same
+      bloodGroup: bloodGroup, // same
       underTreatment: underTreatment,
-      diagnosis: '6480c801af9f7f61b1b8435a',
-      stage: 1, // same above
+      diagnosis: diagnosis?._id,
+      stage: stage, // same above
     })
       .then(result => {
         console.log(result, 'result in user management');
         navigation.navigate(RoutesConstant.HOME_PAGE);
       })
       .catch(err => {
-        Alert.alert('Error',err?.response?.data?.message || 'Enter valid number', [
-       
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ]);
-        console.log(err?.response?.data,'err?.response?.dataerr?.response?.data');
+        Alert.alert(
+          'Error',
+          err?.response?.data?.message || 'Enter valid number',
+          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        );
+        console.log(
+          err?.response?.data,
+          'err?.response?.dataerr?.response?.data',
+        );
         // console.log(err?.response?.data?.message, 'err in user management');
       });
   };

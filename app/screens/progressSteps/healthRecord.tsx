@@ -49,17 +49,17 @@ const AlertPopUp = (alertVal)=>{
 const onHandlePress =()=>{
   // handlePress()
 
-  if (!language) {
-   return AlertPopUp('Language')
-  }else if (!bloodGroup){
-    return AlertPopUp('Blood-Group')
-  }else if (!height){
-    return AlertPopUp('Height')
-  }else if (!weight){
-    return AlertPopUp('Weight')
-  }else{
+  // if (!language) {
+  //  return AlertPopUp('Language')
+  // }else if (!bloodGroup){
+  //   return AlertPopUp('Blood-Group')
+  // }else if (!height){
+  //   return AlertPopUp('Height')
+  // }else if (!weight){
+  //   return AlertPopUp('Weight')
+  // }else{
     handlePress()
-  }
+  // }
 }
   //   const signUpScreen = false;
   // const {signUpScreen}=route?.params

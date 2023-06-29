@@ -4,10 +4,14 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import assets from '../../assets'
 import {TextInput,Button} from 'react-native-paper'
 import MIcon from 'react-native-vector-icons/SimpleLineIcons';
+import FileIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+
 import { RoutesConstant } from '../../navigators'
 
 const AddHealthRecord = ({handlePress,arrowBack,navigation,image,handleHealthRecord}) => {
      // const image= false
+     console.log(image,'image');
   return (
     <>
     <View style={{flexDirection:'row',justifyContent: 'space-between',marginHorizontal:10,marginVertical:20}}>
@@ -25,17 +29,23 @@ const AddHealthRecord = ({handlePress,arrowBack,navigation,image,handleHealthRec
         VIEW HEALTH RECORD
      </Text>
         </View>
-     {image && <TouchableOpacity style={{backgroundColor: '#936CAB',borderRadius:24,paddingHorizontal:10,width:'30%',alignItems:'center',justifyContent:'center'}} onPress={handleHealthRecord}>
+       <TouchableOpacity style={{backgroundColor: '#936CAB',borderRadius:24,paddingHorizontal:10,width:'30%',alignItems:'center',justifyContent:'center'}} onPress={handleHealthRecord}>
 <Text style={{color:'white'}}>+ Add New</Text>
-     </TouchableOpacity>}
+     </TouchableOpacity>
     </View>
-    {!image &&<TouchableOpacity style={{backgroundColor: '#936CAB',borderRadius:34,paddingHorizontal:10,width:'30%',alignItems:'center',justifyContent:'center',height:100,width:'60%',alignSelf:'center'}} onPress={handleHealthRecord}>
+    {image?.length==0 &&<TouchableOpacity style={{height:'40%',width:'90%',borderWidth:1,borderColor:'#936CAB',alignSelf:'center',borderRadius:10,alignItems:'center',justifyContent:'center'}} activeOpacity={0.5} onPress={handleHealthRecord}>
+      <FileIcon name={'file-document-edit-outline'} size={45} tintColor={'red'}/>
+<Text style={{fontSize:18}}>
+Upload Health Record 
+</Text>
+    </TouchableOpacity>}
+    {/* {image &&<TouchableOpacity style={{backgroundColor: '#936CAB',borderRadius:34,paddingHorizontal:10,width:'30%',alignItems:'center',justifyContent:'center',height:100,width:'60%',alignSelf:'center'}} onPress={handleHealthRecord}>
 <Text style={{color:'white'}}>+ Add Health Record</Text>
-     </TouchableOpacity>}
+     </TouchableOpacity>} */}
     <KeyboardAwareScrollView style={{}}>
 
 {
-   image &&    <>
+   image?.length>0 &&    <>
        <View style={{paddingHorizontal:22,flexDirection:'row',justifyContent:'space-between',marginHorizontal:10,marginVertical:10}}>
      <Text style={{color:'#999999',fontSize:15}}>Updated On</Text>
 <Text style={{color:'black',fontSize:15,fontWeight:'500'}}>{ new Date().toLocaleDateString()}</Text>
@@ -44,9 +54,9 @@ const AddHealthRecord = ({handlePress,arrowBack,navigation,image,handleHealthRec
     
      <View style={{width:'100%',}}>
      <Image
-     source={{uri:image}}
+     source={{uri:image[0]}}
      style={{height:400,width:'100%'}}
-     resizeMode='contain'
+     resizeMode='cover'
      />
 </View>
      </>

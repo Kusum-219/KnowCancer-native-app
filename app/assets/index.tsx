@@ -22,8 +22,11 @@ const assets = {
    introSlider:require("./images/carousel1.png"),
    ellipse:require("./images/ellipse.png"),
    headerImg:require("./images/headerImage.png"),
-   pixaBy:require("./images/Pixabay-1853400.png")
-  // gallery: require('./images/gallery.png'),
+   pixaBy:require("./images/Pixabay-1853400.png"),
+  introSlider1: require('./images/introSlider1.png'),
+  introSlider2: require('./images/introSlider2.png'),
+  introSlider3: require('./images/introSlider3.png'),
+
 
 };
 

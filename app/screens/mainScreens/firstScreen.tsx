@@ -15,6 +15,7 @@ import assets from "../../assets";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RoutesConstant } from "../../navigators";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { directConsult, videoGuidance } from "../../services/Auth";
 
 const HomeScreen = ({navigation}) => {
   // const navigation = useNavigation();
@@ -23,11 +24,35 @@ const HomeScreen = ({navigation}) => {
       headerShown: false,
     });
   }, []);
-  const [userInfo, setUserInfo] = useState()
-  useEffect(() => {
-    AsyncStorage.getItem('UserInfo').then(r=> setUserInfo(r));
-  }, [])
-  console.log(userInfo,'userInfo');
+  const cardHandlePress = (item)=>{console.log(item,'item');
+if (item.title =="Direct Consult") {
+  directConsult().then(r=>
+   { navigation.navigate(item.href)
+    console.log(r?.data,'direct consult data')}
+    ).catch(e=>{
+      console.log(e?.response,'erroe');
+    })
+}else if (item.title =="Video Guidance"){
+  videoGuidance().then((result) => {
+    navigation.navigate(item.href)
+    console.log(result.data,'result in video guidance');
+  }).catch((err) => {
+    console.log(err?.response,'errorrr in video guidance');
+  });
+}else{
+  navigation.navigate(item.href)
+}
+  }
+  // const [userInfo, setUserInfo] = useState()
+  // useEffect(async () => {
+  //   // AsyncStorage.setItem('accessToken', result?.data?.accessToken);
+
+  //  const userInfoData= await AsyncStorage.getItem('UserInfo').then(r=> {return r});
+  //  setUserInfo(userInfoData)
+  //  console.log(userInfo,'userInfo ======',userInfoData);
+
+  // }, []);
+  // console.log(userInfo?.user,'userInfo',userInfo);
   const [carouselData, setCarouselData] = useState([
     {
       title: "Direct Consult",
@@ -41,7 +66,7 @@ const HomeScreen = ({navigation}) => {
       image: assets.introSlider,
       description:
         " Irure incididunt ex esse magna Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem  velit sint sit consectetur eiusmod sit Lorem.",
-        href:RoutesConstant.DIRECT_CONSULT,
+        href:RoutesConstant.CHAT,
       },
     {
       title: "Chat & Consult",
@@ -59,7 +84,7 @@ const HomeScreen = ({navigation}) => {
         <Text style={styles.cardTitle}>{item.title}</Text>
         <Text style={styles.cardDescription}>{item.description}</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate(item.href)}
+          onPress={() => cardHandlePress(item)}
           style={styles.cardButton}
         >
           <Text style={styles.whiteText}>Start</Text>
@@ -228,7 +253,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 600,
-    color:'#000'
+    color:'#000',
+    paddingHorizontal: 10,
+
   },
   carouselCard: {
     backgroundColor: "#936CAB",
@@ -268,6 +295,7 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     borderRadius: 999,
     backgroundColor: "#936CAB",
+    marginTop:12
   },
   blogCard: {
     flexDirection: "row",
@@ -287,6 +315,9 @@ const styles = StyleSheet.create({
   blogTitle: {
     fontSize: 16,
     fontWeight: 500,
-    color:'#000'
+    color:'#000',
+    marginBottom:8,
+    paddingHorizontal: 5,
+
   },
 });

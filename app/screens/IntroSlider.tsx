@@ -12,270 +12,254 @@ import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import IconFeather from "react-native-vector-icons/Feather";
 import assets from "../assets";
+import AppIntroSlider from "react-native-app-intro-slider";
+import { RoutesConstant } from "../navigators";
 
-const IntroSlider = () => {
-  const navigation = useNavigation();
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
 
-  const [carouselData, setCarouselData] = useState([
-    {
-      title: "Direct Consult",
-      image: assets.introSlider,
-      description:
-        "Irure incididunt ex esse magna Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem  velit sint sit consectetur eiusmod sit Lorem.",
-      href: "DirectConsult",
-    },
-    {
-      title: "Video Guidance",
-      image: assets.introSlider,
-      description:
-        " Irure incididunt ex esse magna Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem  velit sint sit consectetur eiusmod sit Lorem.",
-      href: "DirectConsult",
-    },
-    {
-      title: "Chat & Consult",
-      image: assets.introSlider,
-      description:
-        " Irure incididunt ex esse magna Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem  velit sint sit consectetur eiusmod sit Lorem.",
-      href: "Chat",
-    },
-  ]);
 
-  const renderItem = ({ item }) => (
-    <View key={item.title} style={styles.carouselCard}>
-      <View style={styles.innerCard}>
-        <Image style={styles.cardImage} source={item.image} />
-        <Text style={styles.cardTitle}>{item.title}</Text>
-        <Text style={styles.cardDescription}>{item.description}</Text>
+const IntroSlider = ({navigation}) => {
+  const RenderItem = ({item}: any) => {
+    console.log(item?.key,'item');
+    return (
+     
+      <View style={{backgroundColor:item?.key=='s1'?'#622864E5':item?.key=='s2'?'#5E51EABF':'#BF3DB7',flex:1}}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(item.href)}
-          style={styles.cardButton}
-        >
-          <Text style={styles.whiteText}>Start</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-
-  return (
-    <View style={styles.pageContainer}>
-      {/* -----------------HEADER CARD ------------- */}
-      <View style={styles.headerCard}>
-        <View style={styles.circleOne}></View>
-        <View style={styles.circleTwo}></View>
-        <Image
-          style={styles.headerImage}
-          source={assets.headerImg}
-        />
-        <View style={styles.textContainer}>
-          <Text style={styles.heading}>Hey,Nikhil</Text>
-          <Text style={styles.whiteText}>Hey,Nikhil</Text>
-          <Text style={styles.welcome}>
-            Welcome to <Text style={styles.knowcancer}>kNOcancer</Text>
+          style={{alignItems: 'flex-end', padding: 20}}
+          onPress={() => handleIntroSkip()}>
+          <Text style={[styles.navigationButtonText]}>
+            Skip
           </Text>
-        </View>
-      </View>
-      {/* ----------CONTENT------------- */}
-      <View style={styles.container}>
-        {/*--------------------- SEARCHBAR------------------- */}
+        </TouchableOpacity>
         <View
-          style={styles.search}
-          className="flex-row space-x-2 flex-1 border border-gray-300 rounded-lg items-center pr-2"
-        >
-          <IconFeather name="search" size={20} color="#000000 " />
-          <TextInput className="flex-1 p-2 " placeholder="Search" />
+          style={{
+            // borderWidth: item?.key == 's3' ? 5 : 0,
+            // borderColor: item?.key == 's3' ? '#000' : 'fff',
+            borderRadius: 18,
+            width:  '100%',
+            height:'57%',
+            justifyContent:'center',
+            alignSelf:'center',
+
+          }}>
+          <Image
+            source={item?.image}
+            resizeMode="contain"
+            style={[
+              styles.introImageStyle,
+              {alignSelf: 'center', width:'90%',            height:'100%',            },
+            ]}
+          />
         </View>
-        {/* ---------HEADING---------- */}
-        <Text style={styles.title}>
-          Bringing Cancer Treatment and help on Chat !!
-        </Text>
-        {/* -----------HORIXONTAL CAROUSEL (FLATLIST) CARDS------------------- */}
-        <FlatList
-          data={carouselData}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item, index) => index}
-          renderItem={renderItem}
-          contentContainerStyle={{
-            paddingVertical: 8,
-          }}
-        />
-        {/* -----------------KNOWWLEDGE SECTION------------------- */}
-        {/* ---------HEADING---------- */}
-        <Text style={styles.title}>Little Knowledge section for you</Text>
-        {/* ---------------BLOG CARD----------------- */}
-        <View style={styles.blogCard}>
-          <View style={styles.blogText}>
-            <Text style={styles.blogTitle}>Medicine Can Save You</Text>
-            <Text style={styles.cardDescription}>
-              {
-                "Irure incididunt ex esse magna Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem  velit sint sit consectetur eiusmod sit Lorem."
-              }
-            </Text>
-            <Text style={styles.cardDescription}>
-              Irure incididunt ex esse im Lorem velit sint sit consectetur
-              eiusmod sit Lorem.
-            </Text>
-          </View>
-          <View style={styles.blogImage}>
-            <Image
-              style={{ borderRadius: 10 }}
-              source={assets.pixaBy}
-            />
-          </View>
-        </View>
+       
+      
+        {item?.text}
+       
       </View>
-    </View>
-  );
+    );
+  };
+
+  const handleIntroDone = () => {
+    navigation.navigate(RoutesConstant.LOGIN, {
+      signUpScreen: false,
+    });
+    // setShowApp(true);
+    // let newUserData = {seen_walkthrough: true};
+    // userInfoUpdate?.mutate(newUserData);
+  };
+  const handleIntroSkip = () => {
+    navigation.navigate(RoutesConstant.LOGIN, {signUpScreen: false});
+    // setShowApp(false);
+    // let newUserData = {seen_walkthrough: true};
+    // userInfoUpdate?.mutate(newUserData);
+  };
+  return (
+    <>
+    <AppIntroSlider
+        data={slides}
+        renderItem={RenderItem}
+        onDone={() => handleIntroDone()}
+        // showSkipButton={true}
+        onSkip={() => handleIntroSkip()}
+        showPrevButton={true}
+       
+        renderDoneButton={() => (
+          <View style={[styles.row]}>
+            <Text style={styles.navigationButtonText}>
+              DONE
+            </Text>
+          </View>
+        )}
+        
+        renderNextButton={() => (
+          <View style={styles.row}>
+            <Text style={styles.navigationButtonText}>
+              NEXT
+            </Text>
+          </View>
+        )}
+        renderPrevButton={() => (
+          <View style={styles.row}>
+            <Text style={styles.navigationButtonText}>
+              PREV
+            </Text>
+          </View>
+        )}
+        dotStyle={{
+          backgroundColor: '#fff',
+          height: 12,
+          width: 12,
+          borderRadius: 6,
+          opacity: 0.2,
+          // marginBottom: 20,
+        }}
+        activeDotStyle={{
+          backgroundColor: '#fff',
+          
+          height: 12,
+          width: 12,
+          borderRadius: 6,
+          // marginBottom: 20,
+        }}
+
+      />
+    </>
+  )
 };
 
 export default IntroSlider;
-
 const styles = StyleSheet.create({
-  pageContainer: {
-    flex: 1,
-    backgroundColor: "rgba(195, 136, 247, 0.2)",
-    backgroundOpacity: 0.1,
-  },
   container: {
-    paddingHorizontal: 10,
-  },
-  headerCard: {
-    backgroundColor: "#713D73",
-    height: 196,
-    padding: 10,
-    position: "relative",
-    borderRadius: 12,
-    display: "flex",
-    alignItems: "flex-end",
-    justifyContent: "flex-end",
-  },
-  circleOne: {
-    backgroundColor: "#7D5B92",
-    borderRadius: 9999999,
-    position: "absolute",
-    width: 123,
-    height: 114,
-    left: -21,
-    top: -11.71,
-    zIndex: 30,
-  },
-  circleTwo: {
-    backgroundColor: "#7E5380",
-    backgroundOpacity: "87%",
-    borderRadius: 9999999,
-    height: 301,
-    width: 301,
-    position: "absolute",
-    top: -105,
-    left: -112,
-    zIndex: 10,
-  },
-  headerImage: {
-    height: 150,
-    zIndex: 40,
-    bottom: -10,
-    left: 20,
-    position: "absolute",
-  },
-  heading: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    textAlign: "left",
-  },
-  whiteText: {
-    color: "#FFFFFF",
-  },
-  textContainer: {
-    color: "#FFFFFF",
-    zIndex: 50,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-end",
-  },
-  welcome: {
-    zIndex: 50,
-    fontSize: 16,
-    fontWeight: 600,
-    color: "#fff",
-    marginTop: 50,
-  },
-  knowcancer: {
-    fontSize: 36,
-  },
-  search: {
-    display: "flex",
-    flexDirection: "row",
-    padding: 10,
-    marginVertical: 10,
-    borderColor: "#000",
-    borderWidth: 1,
-    borderRadius: 10,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 600,
-  },
-  carouselCard: {
-    backgroundColor: "#936CAB",
-    paddingTop: 60,
-    minHeight: 250,
-    width: 210,
-    marginLeft: 10,
-    borderRadius: 12,
-  },
-  innerCard: {
-    borderRadius: 12,
-    width: "100%",
-    backgroundColor: "#fff",
     flex: 1,
-    padding: 5,
-    alignItems: "center",
-  },
-  cardImage: {
-    width: 150,
-    marginTop: -40,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 500,
-    marginTop: 2,
-  },
-  cardDescription: {
-    color: "#938f99",
-    fontSize: 12,
-    fontWeight: 400,
-    textAlign: "justify",
-    paddingHorizontal: 5,
-  },
-  cardButton: {
-    paddingHorizontal: 30,
-    paddingVertical: 7,
-    borderRadius: 999,
-    backgroundColor: "#936CAB",
-  },
-  blogCard: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    boxShadow: "0px 4px 4px #936CAB",
+    alignItems: 'center',
     padding: 10,
-    justifyContent: "space-between",
-    marginTop: 10,
+    justifyContent: 'center',
   },
-  blogText: {
-    width: "59%",
+  titleStyle: {
+    // padding: 10,
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  blogImage: {
-    width: "39%",
-  },
-  blogTitle: {
+  paragraphStyle: {
+    // padding: 20,
+    textAlign: 'center',
     fontSize: 16,
-    fontWeight: 500,
+  },
+  introImageStyle: {
+    // height:'60%',
+    // flex: 0.85,
+    position: 'relative',
+    width: '100%',
+    // overflow:'hidden'
+    // width: 350,
+    // height: 200,
+  },
+  introTextStyle: {
+    fontSize: 20,
+    // color: 'white',
+    textAlign: 'center',
+    marginVertical: 3,
+    paddingHorizontal: 25,
+    // ...fontConfigRoboto?.regular,
+    fontWeight: '300',
+  },
+  introTitleStyle: {
+    fontSize: 33,
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    paddingHorizontal: 8,
+    textTransform: 'uppercase',
+  },
+  getStarted: {
+    // fontWeight: '700',
+    // color: Colors.primary,
+    paddingHorizontal: 40,
+    textAlign: 'center',
+    // // fontSize: 24,
+
+    fontSize: 30,
+    top: 35,
+    color:'#fff',
+    fontWeight:'600'
+    // // color: 'red',
+    // position: 'absolute',
+    // bottom: '20%',
+    // // marginHorizontal: 20,
+    // justifyContent: 'center',
+    // bottom:30
+    // textAlign: 'center',
+    // backgroundColor:'yellow',
+    // paddingTop:15,
+    // flex:10,
+    // justifyContent:'center',
+    // position:'relative',
+    // bottom:20,
+    // zIndex:9999999
+    // lineHeight:0
+    // ...fontConfigRoboto?.regular,
+    // fontSize: 16,
+  },
+  desc: {
+    fontSize: 18,
+    color: 'white',
+    // ...fontConfigRoboto?.regular,
+    fontWeight: '300',
+    textAlign: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    bottom: -12,
+    // backgroundColor: Colors.primary,
+    // width: '30%',
+    // paddingVertical: 10,
+    // alignSelf: 'center',
+  },
+  navigationButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
+    // top:0,
+    // position
   },
 });
+
+const slides = [
+  {
+    key: 's1',
+
+    text: (
+      <Text style={styles.getStarted}>
+        {`Doctors & experts to\n help you`}
+      </Text>
+    ),
+   
+
+ 
+ 
+    image: assets.introSlider1,
+  },
+  {
+    key: 's2',
+    text: (
+      <Text style={styles.getStarted}>
+        {'Oncologist curated \n Answers and Consults.'}
+      </Text>
+    ),
+    image: assets.introSlider2,
+   
+  },
+  {
+    key: 's3',
+    text: (
+      <Text style={[styles.getStarted]}>
+        {` Videos to Help You More`}
+      </Text>
+    ),
+    image: assets.introSlider3,
+    // svg: <WalkThroughRoundup width={300} />,
+    // backgroundColor: Colors.primary,
+  },
+];

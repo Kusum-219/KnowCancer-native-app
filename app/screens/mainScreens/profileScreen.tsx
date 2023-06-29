@@ -3,6 +3,7 @@ import React from 'react'
 import HeaderComponent from '../../components/headerComponent/header'
 import assets from '../../assets';
 import { RoutesConstant } from '../../navigators';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = ({navigation}) => {
   const DATA = [
@@ -112,7 +113,10 @@ const ProfileScreen = ({navigation}) => {
 
    </View>
       </View>
-   <TouchableOpacity style={ {flex:1,marginTop: 35,marginBottom:20,flexDirection:'row',alignItems:'center',marginHorizontal:25}} onPress={()=>navigation.navigate(RoutesConstant.LOGIN)}>
+   <TouchableOpacity style={ {flex:1,marginTop: 35,marginBottom:20,flexDirection:'row',alignItems:'center',marginHorizontal:25}} onPress={()=>{
+     AsyncStorage.removeItem('accessToken'),
+     navigation.navigate(RoutesConstant.LOGIN)
+    }}>
 <View style={{
       height:35,width:35,
       backgroundColor:'#936CAB',

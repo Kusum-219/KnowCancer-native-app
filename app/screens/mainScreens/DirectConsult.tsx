@@ -5,6 +5,7 @@ import IconFeather from "react-native-vector-icons/Feather";
 import assets from "../../assets";
 import { RoutesConstant } from "../../navigators";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { doctorList } from "../../services/Auth";
 
 const item = {
   title: "Direct Consult",
@@ -21,7 +22,17 @@ const DirectConsult = ({navigation}) => {
       headerShown: false,
     });
   }, []);
-
+const doctorDirectConsult= ()=>{
+  doctorList().then((result) => {
+    navigation.navigate(RoutesConstant.DOCTORS,{
+      doctorList:result?.data
+    })
+    console.log(result?.data,'resultssss');
+  }).catch((err) => {
+    console.log(err?.response,'errorr');
+  });
+  // navigation.navigate(RoutesConstant.DOCTORS)
+}
   return (
     <View style={styles.pageContainer}>
       {/* -----------------HEADER CARD ------------- */}
@@ -58,7 +69,7 @@ const DirectConsult = ({navigation}) => {
         </Text>
         <KeyboardAwareScrollView>
         <TouchableOpacity
-          onPress={() => navigation.navigate(RoutesConstant.DOCTORS)}
+          onPress={() => doctorDirectConsult()}
           key={item.title}
           style={styles.carouselCard}
         >
@@ -82,10 +93,10 @@ const DirectConsult = ({navigation}) => {
           alignItems: "center",
           marginHorizontal: 10,
         }}
-        onPress={() => navigation.navigate(RoutesConstant.VERIFY_DOCTOR)}
+        onPress={() => doctorDirectConsult()}
       >
         <Text style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>
-          + Connect a new Doctor
+           Connect
         </Text>
       </TouchableOpacity>
     </View>
