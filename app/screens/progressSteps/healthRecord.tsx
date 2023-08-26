@@ -18,6 +18,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MIcon from 'react-native-vector-icons/AntDesign';
 import { diagnosisManagement } from '../../services/Auth';
+import Toaster from '../../components/toast/Toaster';
 
 interface HealthRecordProps {
   navigation?: any;
@@ -26,6 +27,8 @@ interface HealthRecordProps {
 const HealthRecord = ({navigation, route, handlePress,language, setLanguage,height, setHeight,weight, setWeight,underTreatment, setUnderTreatment,newcase, setNewCase,diagnosis, setDiagnosis,stage, setStage,bloodGroup, setBloodGroup}: HealthRecordProps) => {
   const styles = progressSteps;
   console.log(route?.params, 'route');
+  const toasterRef = React.useRef<any>();
+
   const [diagnosisData, setDiagnosisData] = React.useState();
 // console.log(language,'====');
   const Language = ['Hindi', 'English'];
@@ -36,18 +39,27 @@ const HealthRecord = ({navigation, route, handlePress,language, setLanguage,heig
   const Stage = ['Stage 1', 'Stage 2','Stage 3','Stage 4'];
 React.useEffect(() => {
   diagnosisManagement().then(r=>{
-    setDiagnosisData(r?.data?.data)
+    console.log(r?.data,'r?.data');
+    setDiagnosisData(r?.data)
     console.log(r?.data?.data,'diagnosis data');
   })
 }, [])
 const AlertPopUp = (alertVal)=>{
+
   Alert.alert('Error',`${alertVal} is required` || 'The field is required', [
-     
+
     {text: 'OK', onPress: () => console.log('OK Pressed')},
   ])
+  // toasterRef.current.showToaster(
+  //   {
+  //    message:`${alertVal} is required`,
+  //    type:'E'
+  //   }
+  //  );
+ 
 }
 const onHandlePress =()=>{
-  // handlePress()
+  handlePress()
 
   // if (!language) {
   //  return AlertPopUp('Language')
@@ -58,7 +70,7 @@ const onHandlePress =()=>{
   // }else if (!weight){
   //   return AlertPopUp('Weight')
   // }else{
-    handlePress()
+  //   handlePress()
   // }
 }
   //   const signUpScreen = false;
@@ -66,6 +78,8 @@ const onHandlePress =()=>{
 
   return (
     <KeyboardAwareScrollView>
+                  <Toaster ref={toasterRef} />
+
       <View style={{alignItems: 'center'}}>
         <SelectDropdown
           data={Language}
@@ -126,32 +140,46 @@ const onHandlePress =()=>{
         <View
           style={{
             flexDirection: 'row',
-            width: '90%',
-            justifyContent: 'space-between',
+            width: '94%',
+            // justifyContent: 'space-between',
             marginBottom: 20,
           }}>
-         <TextInput
+       <View style={{width:'50%',alignItems:'center'}}>
+       <TextInput
       label="Height"
       mode='outlined'
       style={{
-        width:'45%'
+        width:'90%',
+        paddingRight:20
       }}
       value={height}
       onChangeText={(e)=>{
         setHeight(e)
       }}
+      keyboardType='number-pad'
     />
-    <TextInput
+    <Text style={{position:'absolute',right:22,bottom:15,}}>Cm</Text>
+       </View>
+       <View style={{width:'50%',alignItems:'center'}}>
+       <TextInput
       label="Weight"
       mode='outlined'
       style={{
-        width:'45%'
+        width:'90%',
+        paddingRight:20
+
       }}
       value={weight}
       onChangeText={(e)=>{
         setWeight(e)
       }}
+      keyboardType='number-pad'
+
     />
+        <Text style={{position:'absolute',right:22,bottom:15,}}>Kg</Text>
+
+       </View>
+   
           {/* <SelectDropdown
             data={BloodGroup}
             onSelect={(selectedItem, index) => {
@@ -251,7 +279,7 @@ const onHandlePress =()=>{
             }}
           />
         <View style={{backgroundColor:'white',width:'90%',marginBottom:20,borderRadius:8,borderWidth:1,borderColor:'#6750A4',paddingHorizontal:10}}>
-        <Text style={{color:'#936DAC'}}>Are you under Treatment?</Text>
+        <Text style={{color:'#936DAC',fontSize:16}}>Are you under Treatment?</Text>
         <View style={{flexDirection:'row',justifyContent:'space-between',width:'85%'}}>
      <View style={{flexDirection:'row',alignItems:'center'}}>
      <RadioButton
@@ -282,7 +310,7 @@ const onHandlePress =()=>{
             marginBottom: 20,
           }}
         /> */}
-        <TextInput
+        {/* <TextInput
           label="New Case"
           mode="outlined"
           style={{
@@ -293,7 +321,7 @@ const onHandlePress =()=>{
           onChangeText={e=>{
             setNewCase(e)
           }}
-        />
+        /> */}
         {/* <View style={{flexDirection: 'row', width: '90%', marginBottom: 20}}> */}
           <SelectDropdown
             data={diagnosisData}
@@ -397,7 +425,7 @@ const onHandlePress =()=>{
         {/* </View> */}
         <View style={{marginVertical: 30}}>
           <Button
-            children={'Submit'}
+            children={'Next'}
             contentStyle={{
               backgroundColor: '#936DAC',
               width: '100%',

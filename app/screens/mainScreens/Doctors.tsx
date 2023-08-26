@@ -18,28 +18,29 @@ const Doctors = ({route}) => {
   console.log(doctorList, 'list');
   const connectNewDoctor = item => {
     console.log(item, 'itemsss 200');
-    connectionRequest({
-      doctorId: item?.doctorId,
-    })
-      .then(result => {
-        console.log(result, 'result in 24');
-        if (result?.data?.message == 'success') {
-          navigation.navigate(RoutesConstant.CHAT);
-        } else {
-          console.log(result?.data, 'result?.data');
-          navigation.navigate(RoutesConstant.VERIFY_DOCTOR, {
-            token: result?.data,
-            doctorId: item?.doctorId,
-          });
-        }
-        console.log(result?.data?.message, 'result');
 
-        console.log(result?.data, 'resulttttt request');
-      })
-      .catch(err => {
-        console.log(err, 'error in request');
-      });
-    // navigation.navigate(RoutesConstant.VERIFY_DOCTOR)
+    // connectionRequest({
+    //   doctorId: item?.doctorId,
+    // })
+    //   .then(result => {
+    //     console.log(result, 'result in 24');
+    //     if (result?.data?.message == 'success') {
+    //       navigation.navigate(RoutesConstant.CHAT);
+    //     } else {
+    //       console.log(result?.data, 'result?.data');
+    //       navigation.navigate(RoutesConstant.VERIFY_DOCTOR, {
+    //         token: result?.data,
+    //         doctorId: item?.doctorId,
+    //       });
+    //     }
+    //     console.log(result?.data?.message, 'result');
+
+    //     console.log(result?.data, 'resulttttt request');
+    //   })
+    //   .catch(err => {
+    //     console.log(err, 'error in request');
+    //   });
+    navigation.navigate(RoutesConstant.VERIFY_DOCTOR)
   };
   const [doctors, setDoctors] = useState([
     {
@@ -82,14 +83,14 @@ const Doctors = ({route}) => {
   const renderItem = ({item}) => (
     <View
       style={{
-        width: 220,
-        padding: 10,
+        width: 180,
+        
         backgroundColor: '#fff',
-        marginHorizontal: 5,
+        margin: 5,
         borderRadius: 10,
       }}>
       <View style={styles.innerCard}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row',padding: 10,}}>
           <Image
             style={{width: 40, height: 40, borderWidth: 1, borderRadius: 999}}
             source={assets.ellipse}
@@ -104,18 +105,18 @@ const Doctors = ({route}) => {
             {item.name}
           </Text>
         </View>
-        <Text style={{color: '#938f99', marginTop: 10}}>
+        <Text style={{color: '#938f99', marginTop: 10,paddingHorizontal:5,paddingLeft:10}}>
           {
             'Culpa ad magna quis ullamco tempor non mollit aliqua aliquip. Do mollit culpa commodo commodo laborum.'
           }
         </Text>
-        <Text style={{color: '#938f99', marginTop: 25}}>
+        <Text style={{color: '#938f99', marginTop: 25,fontSize:13,paddingLeft:10}}>
           Last Connected:<Text style={{color: '#000'}}>23.02.2023</Text>
         </Text>
         <TouchableOpacity
           onPress={() => connectNewDoctor(item)}
           style={styles.cardButton}>
-          <Text style={{textAlign: 'right', color: '#936CAB', marginTop: 10}}>
+          <Text style={{textAlign: 'right', color: '#936CAB', marginTop: 10,padding: 10,}}>
             Connect
           </Text>
         </TouchableOpacity>
@@ -152,24 +153,26 @@ const Doctors = ({route}) => {
       </View>
       {/* --------------CONTENT-------------- */}
       <View style={{flex: 1}}>
-        <View style={{paddingHorizontal: 10, marginTop: 20}}>
+        <View style={{paddingHorizontal: 6, marginTop: 20}}>
           {/* -----------HORIZONTAL CAROUSEL (FLATLIST) CARDS------------------- */}
           <FlatList
             data={doctorList}
-            horizontal
+            // horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item, index) => index}
             renderItem={renderItem}
             contentContainerStyle={{
               paddingVertical: 8,
+              // marginVertical:10
             }}
-            // numColumns={2}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
           />
         </View>
       </View>
 
       {/* --------------ADD NEW DOCTOR BUTTON-------------- */}
-      {/* <TouchableOpacity
+      <TouchableOpacity
           style={{
             paddingHorizontal: 30,
             paddingVertical: 15,
@@ -184,7 +187,7 @@ const Doctors = ({route}) => {
           <Text style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>
             + Connect a new Doctor
           </Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
     </View>
   );
 };

@@ -16,8 +16,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { RoutesConstant } from "../../navigators";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { directConsult, videoGuidance } from "../../services/Auth";
+import { useIsFocused } from "@react-navigation/native";
 
 const HomeScreen = ({navigation}) => {
+  const isFocused = useIsFocused();
+
   // const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -43,16 +46,18 @@ if (item.title =="Direct Consult") {
   navigation.navigate(item.href)
 }
   }
-  // const [userInfo, setUserInfo] = useState()
-  // useEffect(async () => {
-  //   // AsyncStorage.setItem('accessToken', result?.data?.accessToken);
+  const [userInfo, setUserInfo] = useState()
+  useEffect(() => {
+    
+    AsyncStorage.getItem('UserInfo').then((result) => {
+      // return (
+        const data= JSON.parse(result)
+        setUserInfo(data)
 
-  //  const userInfoData= await AsyncStorage.getItem('UserInfo').then(r=> {return r});
-  //  setUserInfo(userInfoData)
-  //  console.log(userInfo,'userInfo ======',userInfoData);
-
-  // }, []);
-  // console.log(userInfo?.user,'userInfo',userInfo);
+      
+      })
+  }, [isFocused])
+  
   const [carouselData, setCarouselData] = useState([
     {
       title: "Direct Consult",
@@ -104,8 +109,8 @@ if (item.title =="Direct Consult") {
           source={assets.headerImg}
         />
         <View style={styles.textContainer}>
-          <Text style={styles.heading}>Hey,Nikhil</Text>
-          <Text style={styles.whiteText}>Hey,Nikhil</Text>
+          <Text style={styles.heading}>Hey,{userInfo?.name}</Text>
+          <Text style={styles.whiteText}>Hey,{userInfo?.name}</Text>
           <Text style={styles.welcome}>
             Welcome to <Text style={styles.knowcancer}>kNOcancer</Text>
           </Text>

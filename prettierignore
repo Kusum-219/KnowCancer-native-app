@@ -1,0 +1,10 @@
+__tests__
+.idea
+.vscode
+bin
+gen
+android
+ios
+locales
+node_modules
+patches

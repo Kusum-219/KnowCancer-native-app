@@ -8,17 +8,21 @@ import {
   TouchableWithoutFeedback,
   View,
   Alert,
+  Platform
 } from 'react-native';
 import React, {useLayoutEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import IconFeather from 'react-native-vector-icons/Feather';
 import {RoutesConstant} from '../../navigators';
-import {verifyToken} from '../../services/Auth';
+import {connectionRequest, verifyToken} from '../../services/Auth';
+import Toaster from '../../components/toast/Toaster';
 
 const VerifyDoctorCode = ({route}) => {
   const [otp, setOtp] = useState('');
   const inputRefs = useRef([]);
-  const {token, doctorId} = route?.params;
+  const toasterRef = React.useRef<any>();
+
+  const {token, doctorId} = route?.params || {};
   console.log(token?.requestedToken, 'requestedToken');
   const handleOtpChange = (value, index) => {
     let newOtp = otp.split('');
@@ -30,9 +34,9 @@ const VerifyDoctorCode = ({route}) => {
     }
   };
   const handleConnect = () => {
-    verifyToken({
-      doctorId: doctorId,
-      requestedToken: token?.requestedToken,
+    connectionRequest({
+      // doctorId: doctorId,
+      // requestedToken: token?.requestedToken,
       code: otp,
     })
       .then(result => {
@@ -44,11 +48,13 @@ const VerifyDoctorCode = ({route}) => {
         console.log(result, 'result verify token');
       })
       .catch(err => {
-        Alert.alert(
-          'Error',
-          err?.response?.data?.message || 'Enter valid Otp',
-          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-        );
+        toasterRef.current.showToaster(
+          {
+           message: err?.response?.data?.message || 'Enter valid Otp',
+           type:'E'
+          }
+         );
+       
         console.log(err?.response?.data, 'response');
       });
     // navigation.navigate(RoutesConstant.CHAT)
@@ -75,6 +81,8 @@ const VerifyDoctorCode = ({route}) => {
       style={{flex: 1, justifyContent: 'center', width: '100%'}}
       behavior={Platform.select({ios: 'padding', android: null})}
       keyboardVerticalOffset={Platform.select({ios: 0, android: 500})}>
+                    <Toaster ref={toasterRef} />
+
       <View style={styles.pageContainer}>
         {/* -----------------HEADER CARD ------------- */}
         <View style={styles.headerCard}>
@@ -146,7 +154,7 @@ const VerifyDoctorCode = ({route}) => {
           }}
           onPress={() => handleConnect()}>
           <Text style={{fontSize: 16, fontWeight: 600, color: '#fff'}}>
-            Connect
+          Start interacting
           </Text>
         </TouchableOpacity>
       </View>

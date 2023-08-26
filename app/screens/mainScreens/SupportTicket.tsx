@@ -3,9 +3,11 @@ import React, { useState } from 'react'
 import HeaderComponent from '../../components/headerComponent/header'
 import {TextInput,Button} from 'react-native-paper';
 import { createSupportTicket } from '../../services/Auth';
+import Toaster from '../../components/toast/Toaster';
 const SupportTicket = ({navigation}) => {
   const [complain, setComplain] = useState("");
   const [description, setDescription] = useState("");
+  const toasterRef = React.useRef<any>();
 
   const handleTicket = ()=>{
     createSupportTicket({
@@ -14,20 +16,31 @@ const SupportTicket = ({navigation}) => {
       "attachments":"https://knowcancer-dev.s3.ap-south-1.amazonaws.com/supportTicket/2023/0614/1686717342439_1682698614728_Lalpath%2Bsample%20%281%29.pdf"
     }).then((result) => {
       if (result?.data?._id) {
-        Alert.alert(
-          'Success',
-          'Support Ticket Created Successfully',
-          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-        );
+        toasterRef.current.showToaster(
+          {
+            message:'Support Ticket Created Successfully',
+           type:'S'
+          }
+         );
+
       }
       console.log(result?.data?._id,'results in support ticket');
     }).catch((err) => {
-      console.log(err,'error in support ticket');
+      toasterRef.current.showToaster(
+        {
+         message: err?.response?.data?.message || ' Something went wrong',
+         type:'E'
+        }
+       );
+
+      console.log(err?.response,'error in support ticket');
     });
   }
   return (
     <>
     <View>
+    <Toaster ref={toasterRef} />
+
       <HeaderComponent
       text={'Create Your Support Tickets'}
       handleBackPress={()=>navigation.goBack()}
@@ -69,7 +82,7 @@ onChangeText={(e)=>{
     />
    </View>
     </View>
-    <Button 
+    <Button
     children='Create'
     contentStyle={{
         backgroundColor:'#936DAC',
@@ -77,8 +90,8 @@ onChangeText={(e)=>{
         paddingVertical:4,
       borderRadius:28,
       alignSelf:'center'
-        
-        
+
+
     }}
     labelStyle={{fontSize:20,fontWeight:'500',color:'white'}}
     onPress={()=>handleTicket()}

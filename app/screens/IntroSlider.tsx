@@ -26,7 +26,7 @@ const IntroSlider = ({navigation}) => {
         <TouchableOpacity
           style={{alignItems: 'flex-end', padding: 20}}
           onPress={() => handleIntroSkip()}>
-          <Text style={[styles.navigationButtonText]}>
+          <Text style={[styles.navigationButtonText]} allowFontScaling={false}>
             Skip
           </Text>
         </TouchableOpacity>

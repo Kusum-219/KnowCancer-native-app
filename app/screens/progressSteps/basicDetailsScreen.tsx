@@ -21,20 +21,24 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { allState, selectedCity } from '../../services/Auth';
 import { SelectList } from 'react-native-dropdown-select-list'
+import Toaster from '../../components/toast/Toaster';
 
 interface BasicDetailProps {
   navigation?: any;
 }
 
-const BasicDetail = ({navigation,route,handlePress,name,setName,setEmail,email,setAddress,address,phoneNumber,setPhoneNumber,date,setDate,gender,setGender,stateSelect,setselected,citySelect,setCityselected,setPincode,pincode}: BasicDetailProps) => {
+const BasicDetail = ({navigation,route,handlePress,name,setName,setEmail,email,setAddress,address,phoneNumber,setPhoneNumber,date,setDate,gender,setGender,stateSelect,setselected,citySelect,setCityselected,setPincode,pincode,dobDate, setDobDate}: BasicDetailProps) => {
   const styles = progressSteps;
+  const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
 //   const signUpScreen = false;
   // const {signUpScreen}=route?.params
-  // const [date, setDate] = useState(new Date())
+  const [showDate, setShowDate] = useState(false)
   const [open, setOpen] = useState(false)
   const [expanded, setExpanded] = React.useState(false);
   const [cityData, setCityData] = useState()
   const [stateData, setStateData] = useState()
+  const toasterRef = React.useRef<any>();
 
   const [stateId, setStateId] = useState()
   console.log(cityData,'cityDatacityData');
@@ -46,7 +50,7 @@ useEffect(() => {
   })
   console.log('object');
 }, [stateId])
-console.log(name,email,phoneNumber,gender,date,address,stateSelect,citySelect,pincode,setPincode);
+console.log(name,email,phoneNumber,gender,date,address,stateSelect,citySelect,pincode,setPincode,dobDate, setDobDate);
   const onPress = () => setExpanded(!expanded);
   const City = ["Delhi", "Surat"]
   const Pincode = ["1002773", "1007833"]
@@ -62,7 +66,8 @@ console.log(name,email,phoneNumber,gender,date,address,stateSelect,citySelect,pi
 ]
   useEffect(() => {
     allState().then(r=>{
-      setStateData(r?.data?.data)
+      console.log(r?.data,'state dataaaa');
+      setStateData(r?.data)
       // console.log(r?.data?.data,'r 43');
     })
     // setTimeout(() => {
@@ -71,31 +76,42 @@ console.log(name,email,phoneNumber,gender,date,address,stateSelect,citySelect,pi
   }, [])
   const AlertPopUp = (alertVal)=>{
     Alert.alert('Error',`${alertVal} is required` || 'The field is required', [
-       
+
       {text: 'OK', onPress: () => console.log('OK Pressed')},
     ])
+    // toasterRef.current.showToaster(
+    //   {
+    //    message:`${alertVal} is required`,
+    //    type:'E'
+    //   }
+    //  );
+    
   }
 const onHandlePress =()=>{
-  // handlePress()
+  handlePress()
 
-  // if (!name) {
-  //  return AlertPopUp('Name')
-  // }else if (!phoneNumber){
-  //   return AlertPopUp('Phone Number')
-  // }else if (!gender){
-  //   return AlertPopUp('Gender')
-  // }else if (!date){
-  //   return AlertPopUp('DOB')
-  // }else if (!stateSelect){
-  //   return AlertPopUp('State')
-  // }else if (!citySelect){
-  //   return AlertPopUp('City')
-  // }
-  // else if (!pincode){
-  //   return AlertPopUp('Pincode')
-  // }else{
-    handlePress()
-  // }
+//   if (!name) {
+//    return AlertPopUp('Name')
+//   }else if (reg.test(email) == false){
+//     return AlertPopUp('Valid email')
+// }
+  
+//   else if (!phoneNumber){
+//     return AlertPopUp('Phone Number')
+//   }else if (!gender){
+//     return AlertPopUp('Gender')
+//   }else if (!date){
+//     return AlertPopUp('DOB')
+//   }else if (!stateSelect){
+//     return AlertPopUp('State')
+//   }else if (!citySelect){
+//     return AlertPopUp('City')
+//   }
+//   else if (!pincode){
+//     return AlertPopUp('Pincode')
+//   }else{
+//     handlePress()
+//   }
 }
   const Gender = [
  'Male',
@@ -104,9 +120,11 @@ const onHandlePress =()=>{
   ];
   return (
    <KeyboardAwareScrollView>
+                <Toaster ref={toasterRef} />
+
      <View style={{alignItems:'center'}}>
         <TextInput
-      label="Full Name"
+      label="Full Name *"
       mode='outlined'
       style={{
         width:'90%',
@@ -118,7 +136,7 @@ const onHandlePress =()=>{
       }}
     />
       <TextInput
-      label="E-mail"
+      label="E-mail *"
       mode='outlined'
       style={{
         width:'90%',
@@ -133,7 +151,7 @@ const onHandlePress =()=>{
       right={<TextInput.Icon name="email-outline" color={'red'}/>}
     />
       <TextInput
-      label="Phone Number"
+      label="Phone Number *"
       mode='outlined'
       style={{
         width:'90%',
@@ -181,14 +199,14 @@ renderCustomizedButtonChild={(selectedItem, index) => {
   return (
     <View style={styles.dropdown3BtnChildStyle}>
      
-      <Text style={styles.dropdown3BtnTxt}>{selectedItem ? selectedItem : 'Gender'}</Text>
+      <Text style={styles.dropdown3BtnTxt}>{selectedItem ? selectedItem : 'Gender *'}</Text>
       <FontAwesome name="chevron-down" color={'#444'} size={18} />
     </View>
   );
 }}
 />
     <TouchableOpacity onPress={() => setOpen(true)} style={styles.inputViewStyle}>
-<Text>{date?date?.toLocaleDateString():'DD/MM/YYYY'}</Text>
+<Text>{showDate?date?.toLocaleDateString():'DOB *'}</Text>
 <MIcon
           // style={{marginLeft: 10,color:'red'}}
           size={20}
@@ -204,6 +222,7 @@ renderCustomizedButtonChild={(selectedItem, index) => {
         onConfirm={(date) => {
           setOpen(false)
           setDate(date)
+          setShowDate(true)
         }}
         onCancel={() => {
           setOpen(false)
@@ -254,24 +273,7 @@ renderCustomizedButtonChild={(selectedItem, index) => {
     // width:'80%',
   }}
   buttonStyle={{width:'90%',backgroundColor:'white',borderRadius:8,borderColor:'#6750A4',borderWidth:1,marginBottom:18}}
-// renderCustomizedRowChild={
-//   <AppText.Text>hh</AppText.Text>
-// }
-// renderDropdownIcon={isOpened => {
-//   return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18} />;
-// }}
 
-// renderCustomizedButtonChild={(selectedItem, index) => {
-//   console.log(selectedItem,'selectedItem');
-//   return (
-//     <View style={styles.dropdown3BtnChildStyle}>
-     
-//       <Text style={styles.dropdown3BtnTxt}>{selectedItem ? selectedItem : 'Pincode'}</Text>
-//       <FontAwesome name="chevron-down" color={'#444'} size={18} />
-//     </View>
-//   );
-// }}
-// />
 renderCustomizedButtonChild={(selectedItem, index) => {
   console.log('object');
   setStateId(selectedItem?._id)
@@ -289,64 +291,38 @@ renderCustomizedButtonChild={(selectedItem, index) => {
  
 }
 />
-     <SelectDropdown
-	data={cityData}
-	onSelect={(selectedItem, index) => {
-		// console.log(selectedItem, index)
-	}}
-  disabled={!stateSelect}
-	buttonTextAfterSelection={(selectedItem, index) => {
-		return selectedItem?.name
-	}}
-	rowTextForSelection={(item, index) => {
-		return item?.name
-	}}
-  defaultValue={'City'}
-  defaultButtonText='City'
-  dropdownStyle={{
-  }}
-  buttonStyle={{width:'90%',backgroundColor:'white',borderRadius:8,borderColor:'#6750A4',borderWidth:1,marginBottom:18}}
-renderCustomizedButtonChild={(selectedItem, index) => {
-  setCityselected(selectedItem)
-  // console.log(selectedItem,'selectedItem');
-  return (
-    <View style={styles.dropdown3BtnChildStyle}>
-     
-      <Text style={styles.dropdown3BtnTxt}>{selectedItem ? selectedItem?.name : 'City'}</Text>
-      <FontAwesome name="chevron-down" color={'#444'} size={18} />
-    </View>
-  );
-}}
-/>
-<SelectDropdown
-	data={Pincode}
-	onSelect={(selectedItem, index) => {
-    setPincode(selectedItem)
-		// console.log(selectedItem, index)
-	}}
-	buttonTextAfterSelection={(selectedItem, index) => {
-		return selectedItem
-	}}
-	rowTextForSelection={(item, index) => {
-		return item
-	}}
-  defaultValue={'Pincode'}
-  defaultButtonText='Pincode'
-  dropdownStyle={{
-  }}
-  buttonStyle={{width:'90%',backgroundColor:'white',borderRadius:8,borderColor:'#6750A4',borderWidth:1,}}
-renderCustomizedButtonChild={(selectedItem, index) => {
-  // console.log(selectedItem,'selectedItem');
-  return (
-    <View style={styles.dropdown3BtnChildStyle}>
-     
-      <Text style={styles.dropdown3BtnTxt}>{selectedItem ? selectedItem : 'Pincode'}</Text>
-      <FontAwesome name="chevron-down" color={'#444'} size={18} />
-    </View>
-  );
-}}
-/>
 
+ <TextInput
+      label="City"
+      mode='outlined'
+      style={{
+        width:'90%',
+        marginBottom:20
+
+      }}
+      value={citySelect}
+      onChangeText={e=>{
+        setCityselected(e)
+      }}
+
+    />
+ <TextInput
+      label="Pincode"
+      mode='outlined'
+      style={{
+        width:'90%',
+        marginBottom:20
+
+      }}
+      value={pincode}
+      onChangeText={e=>{
+        setPincode(e)
+      }}
+      maxLength={6}
+      keyboardType='number-pad'
+
+    />
+    
     {/* </View> */}
    <View style={{marginVertical:30}}>
    <Button 

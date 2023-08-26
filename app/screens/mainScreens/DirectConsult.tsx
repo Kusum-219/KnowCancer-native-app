@@ -23,6 +23,7 @@ const DirectConsult = ({navigation}) => {
     });
   }, []);
 const doctorDirectConsult= ()=>{
+
   doctorList().then((result) => {
     navigation.navigate(RoutesConstant.DOCTORS,{
       doctorList:result?.data
@@ -31,7 +32,7 @@ const doctorDirectConsult= ()=>{
   }).catch((err) => {
     console.log(err?.response,'errorr');
   });
-  // navigation.navigate(RoutesConstant.DOCTORS)
+  // navigation.navigate(RoutesConstant.VERIFY_DOCTOR)
 }
   return (
     <View style={styles.pageContainer}>
@@ -93,10 +94,12 @@ const doctorDirectConsult= ()=>{
           alignItems: "center",
           marginHorizontal: 10,
         }}
-        onPress={() => doctorDirectConsult()}
+        onPress={() => {
+          navigation.navigate(RoutesConstant.VERIFY_DOCTOR)
+        }}
       >
         <Text style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>
-           Connect
+        + Connect New Doctor
         </Text>
       </TouchableOpacity>
     </View>

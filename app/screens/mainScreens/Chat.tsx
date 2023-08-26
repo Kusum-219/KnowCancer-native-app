@@ -190,7 +190,7 @@ console.log(msg,'msgmsgmsgmsgmsg');
                 placeholder="Type your message here"
                 value={message}
                 onChangeText={text => setMessage(text)}
-                z
+                
               />
               <TouchableOpacity
                 style={styles.sendButton}

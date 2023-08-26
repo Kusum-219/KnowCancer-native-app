@@ -13,7 +13,10 @@ const RoutesConstant: {[key: string]: keyof NavigatorParamList} = {
   DIRECT_CONSULT:'directDoctors',
   CHAT:'chat',
   VERIFY_DOCTOR:'verifyDoctor',
-  SIGNUP:'signUp'
+  SIGNUP:'signUp',
+  SUPPORT_TICKET:'supportTicket',
+  RAISED_TICKET:'raisedTickets',
+  REVIEW_SCREEN:'reviewScreen'
 };
 
 export default RoutesConstant;

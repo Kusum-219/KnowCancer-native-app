@@ -12,13 +12,14 @@ export const loginStyles = StyleSheet.create({
   },
   contentContainer:{
     // flex:1,
-    marginTop:40
+    // marginTop:40
 
     // position:'relative'
   },
   textView:{
     marginVertical:35,
-    alignItems:'center'
+    alignItems:'center',
+    marginTop:'20%'
   },
   text:{
 fontSize:44,
@@ -38,7 +39,7 @@ fontWeight:'800'
   policyView: {
     flexDirection: 'row',
     alignSelf:'center',
-    marginTop:25,
+    marginTop:20,
 
     // ...Layout.row,
     // ...Layout.selfCenter,
@@ -48,7 +49,8 @@ fontWeight:'800'
     flexWrap: 'wrap',
     // ...Gutters.tinyHMargin,
     marginHorizontal: 16,
-    justifyContent:'center'
+    justifyContent:'center',
+    marginBottom:10
     // alignItems:'center'
   },
   signup:{
@@ -64,5 +66,6 @@ fontWeight:'800'
         height:40
 
   },
+  
   
 });

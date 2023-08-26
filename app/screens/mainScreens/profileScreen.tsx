@@ -1,11 +1,15 @@
-import { View, Text,Image,TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text,Image,TouchableOpacity, ScrollView } from 'react-native'
+import React, { useEffect } from 'react'
 import HeaderComponent from '../../components/headerComponent/header'
 import assets from '../../assets';
 import { RoutesConstant } from '../../navigators';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from "@react-navigation/native";
 
 const ProfileScreen = ({navigation}) => {
+  const [userInfo, setUserInfo] = React.useState();
+  const isFocused = useIsFocused();
+
   const DATA = [
     {
       title: 'My Profile',
@@ -31,26 +35,52 @@ const ProfileScreen = ({navigation}) => {
     // //   })
     // },
     {
-      title: 'Supports',
+      title: 'Support',
       icon: assets.support,
       navigation:RoutesConstant.PROFILE_PAGES
     },
+    {
+      title: 'Review',
+      icon: assets.feedback,
+      navigation:RoutesConstant.PROFILE_PAGES
+    },
   ];
+
+  useEffect(() => {
+
+    AsyncStorage.getItem('UserInfo').then((result) => {
+      // return (
+        const data= JSON.parse(result)
+        setUserInfo(data)
+
+
+      })
+  }, [isFocused])
+console.log(userInfo,'infooooooooo');
   return (
     <View style={{flex:1, backgroundColor: "rgba(195, 136, 247, 0.2)",
     backgroundOpacity: 0.1,}}>
-      <HeaderComponent text={'Profile'}/>
-      <View style={{flex:3,marginTop:20}}>
+      <HeaderComponent text={'Profile'} handleBackPress={()=>navigation.navigate(RoutesConstant.HOME_PAGE)}/>
+<ScrollView>
+<View style={{flex:3,marginTop:20}}>
       <View style={{flexDirection:'row',alignItems:'center',marginLeft:15}}>
-          <Image source={assets.profilePic} style={{ height:75,width:75,borderRadius:35}} />
-          <View style={{ height:10,width:10,borderRadius:10,borderColor:'#9B9DFD',borderWidth:1,alignItems:'center',justifyContent:'center',position:'absolute'}}>
+      <View>
+        <View>
+         {userInfo?.avatar?
+         <Image source={{uri:userInfo?.avatar}} style={{ height:75,width:75,borderRadius:35}} />
+         :<View style={{backgroundColor:'#D2D4D6',borderRadius:80/2,height:80,width:80,justifyContent:'center'}}>
+          <Image source={assets.profileImg} style={{ height:65,width:65,borderRadius:35,alignSelf:'center'}} />
+          </View>}
+          </View>
+          <View style={{ height:20,width:20,borderRadius:10,position:'absolute',backgroundColor:'#57FB0A',top:0,right:0}}>
 
         </View>
+        </View>
         <View style={{ marginLeft:22}}>
-          <Text style={{fontWeight: '800',color:'black',fontSize:20}}>Nikhil</Text>
-          <Text style={{color:'black',fontWeight:'300',textDecorationLine:'underline'}}>nikhil.smith@gmail.com</Text>
+          <Text style={{fontWeight: '800',color:'black',fontSize:20}}>{userInfo?.name}</Text>
+          <Text style={{color:'black',fontWeight:'300',textDecorationLine:'underline'}}>{userInfo?.email}</Text>
           <Text style={{fontWeight: '500', color: 'black',marginTop:4,}}>
-          Bangalore
+          {userInfo?.city}
           </Text>
         </View>
       </View>
@@ -58,7 +88,7 @@ const ProfileScreen = ({navigation}) => {
    {DATA.map((item,index) => {
           return (
             <>
-              <TouchableOpacity style={{flexDirection: 'row',alignItems: 'center',marginVertical: 15,justifyContent:'space-between'}} onPress={                   ()=> navigation.navigate(RoutesConstant.PROFILE_PAGES,{index})
+              <TouchableOpacity style={{flexDirection: 'row',alignItems: 'center',marginVertical: 15,justifyContent:'space-between'}} onPress={                   ()=> navigation.navigate(RoutesConstant.PROFILE_PAGES,{index,userInfo})
    }>
       <View style={{flexDirection:'row',alignItems:'center'}}>
      <View style={{
@@ -68,7 +98,7 @@ const ProfileScreen = ({navigation}) => {
       justifyContent:'center',
       borderRadius:24,
      }}>
-     <Image 
+     <Image
         source={item?.icon}
         style={{height:22,width:22,tintColor:'white'}}
         />
@@ -78,7 +108,7 @@ const ProfileScreen = ({navigation}) => {
                   {item?.title}
                 </Text>
       </View>
-                <Image 
+                <Image
         source={assets?.rightArrow}
         // style={{height:30,width:30,}}
         />
@@ -124,14 +154,14 @@ const ProfileScreen = ({navigation}) => {
       justifyContent:'center',
       borderRadius:24,
      }}>
-        <Image 
+        <Image
         source={assets.logOut}
-        style={{height:18,width:18,tintColor:'#E61323'}}
+        style={{height:18,width:18,tintColor:'#fff',marginLeft:3}}
         />
         </View>
           <Text style={{marginLeft: 15,fontSize:16,color:'black',fontWeight:'500'}}>Logout</Text>
         </TouchableOpacity>
-      {/* <Text>profileScreen</Text> */}
+</ScrollView>
     </View>
   )
 }

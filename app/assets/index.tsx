@@ -26,6 +26,8 @@ const assets = {
   introSlider1: require('./images/introSlider1.png'),
   introSlider2: require('./images/introSlider2.png'),
   introSlider3: require('./images/introSlider3.png'),
+  feedback: require('./images/feedback.png'),
+  profileImg: require('./images/profileImg.png'),
 
 
 };

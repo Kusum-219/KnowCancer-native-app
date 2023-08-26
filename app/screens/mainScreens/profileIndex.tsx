@@ -3,13 +3,16 @@ import React from 'react'
 import MyProfile from './myProfile';
 import SupportTicket from './SupportTicket';
 import MyHealthRecord from './myHealthRecord';
+import ALLSupportTicket from './AllSupportTickets';
+import ReviewScreen from './reviewScreen';
 
 const ProfileIndex = ({navigation,route}) => {
-    const {index}=route?.params
+    const {index,userInfo}=route?.params || {}
     console.log(index,'indexxx');
+    console.log(userInfo,'userInfo');
     const renderComponent = () => {
         console.log(index, '19 linne');
-        switch (index) {
+      switch (index) {
           case 0:
             return (
              <MyProfile 
@@ -24,11 +27,24 @@ const ProfileIndex = ({navigation,route}) => {
             );
           case 2:
             return (
-              <SupportTicket
+              <ALLSupportTicket
                 // handlePress={() => setIndex('healthRecord')}
                 navigation={navigation}
               />
             );
+            case 3:
+              return(
+                <ReviewScreen
+                navigation={navigation}
+
+                />
+              )
+          default:
+            return (
+              <MyProfile 
+              navigation={navigation}
+              />
+             );
         }
       };
   return (

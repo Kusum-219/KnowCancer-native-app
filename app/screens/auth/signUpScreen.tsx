@@ -14,6 +14,8 @@ import HeaderComponent from '../../components/headerComponent/header';
 import {RoutesConstant} from '../../navigators';
 import { Button } from 'react-native-paper';
 import {  sendOtpApi } from '../../services/Auth';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Toaster from '../../components/toast/Toaster';
 
 interface SignInProps {
   navigation?: any;
@@ -21,6 +23,8 @@ interface SignInProps {
 
 const SignUp = ({navigation,route}: SignInProps) => {
   const styles = loginStyles;
+  const toasterRef = React.useRef<any>();
+
   console.log(route?.params,'route');
   const [phoneNumber, setPhoneNumber] = React.useState()
 
@@ -46,25 +50,30 @@ const SignUp = ({navigation,route}: SignInProps) => {
       
     }).catch((err) => {
       console.log(err?.response,'err');
-      Alert.alert('Error',err?.response?.data?.message || 'Enter valid number', [
-       
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ]);
+      toasterRef.current.showToaster(
+        {
+         message:err?.response?.data?.message || 'Enter valid number',
+         type:'E'
+        }
+       );
+    
     });
     // {
      
   }
   return (
-    <View style={styles.container}>
-      <HeaderComponent />
+    <KeyboardAwareScrollView style={styles.container}>
+                  <Toaster ref={toasterRef} />
 
-      <View >
-        <View style={styles.contentContainer}>
-          <View style={styles.textView}>
+      <HeaderComponent />
+      <View style={styles.textView}>
             <Text style={styles.text}>
               k<Text style={styles.boldText}>NO</Text>wcancers
             </Text>
           </View>
+      
+        <View style={styles.contentContainer}>
+        
           <Text
             style={{
               marginLeft: 30,
@@ -95,10 +104,10 @@ const SignUp = ({navigation,route}: SignInProps) => {
             />
             <Text
               style={{
-                fontWeight: '700',
-                fontSize: 20,
+                fontWeight: '600',
+                fontSize: 18,
                 position: 'absolute',
-                bottom: 12,
+                bottom: 14,
                 left: 30,
               }}>
               +91
@@ -206,8 +215,7 @@ const SignUp = ({navigation,route}: SignInProps) => {
           </View>
           {/* <Text>Helloo</Text> */}
         </View>
-      </View>
-    </View>
+      </KeyboardAwareScrollView>
   );
 };
 

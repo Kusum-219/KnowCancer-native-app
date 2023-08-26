@@ -38,6 +38,8 @@ import VerifyDoctorCode from '../screens/mainScreens/VerifyDoctorCode';
 import ProfileIndex from '../screens/mainScreens/profileIndex';
 import SignUp from '../screens/auth/signUpScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RaisedTickets from '../screens/mainScreens/RaisedTickets';
+import ReviewScreen from '../screens/mainScreens/reviewScreen';
 
 // import PickerComponent from '@/components/picker/PickerComponent';
 // import {useAuthContext} from '@/screens/auth/AuthContext';
@@ -332,6 +334,19 @@ const AppStack = ({theme}: AppStackProps) => {
           name={RoutesConstant.PROFILE_PAGES}
           component={ProfileIndex}
         />
+         <Stack.Screen
+          name={RoutesConstant.SUPPORT_TICKET}
+          component={SupportTicket}
+        />
+          <Stack.Screen
+          name={RoutesConstant.RAISED_TICKET}
+          component={RaisedTickets}
+        />
+        <Stack.Screen
+          name={RoutesConstant.REVIEW_SCREEN}
+          component={ReviewScreen}
+        />
+        
       </Stack.Group>
     </Stack.Navigator>
   );

@@ -10,8 +10,11 @@ import {Divider} from 'react-native-paper';
 import HealthRecord from './progressSteps/healthRecord';
 import AddHealthRecord from './progressSteps/addHealthrecord';
 import UploadRecord from './progressSteps/uploadRecord';
-import {profileUpload, userManagement} from '../services/Auth';
+import {imageUpload, userManagement} from '../services/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toaster from '../components/toast/Toaster';
+import DocumentPicker from 'react-native-document-picker';
+import ProfileUpload from './progressSteps/profileUpload';
 
 interface ProgressStepsProps {
   navigation?: any;
@@ -22,6 +25,7 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
   //   console.log(route?.params,'route');
   //   const signUpScreen = false;
   // const {signUpScreen}=route?.params
+  const toasterRef = React.useRef<any>();
 
   const [index, setIndex] = React.useState(0);
   const [headerName, setHeaderName] = React.useState('Basic Details');
@@ -30,6 +34,7 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
   const [phoneNumber, setPhoneNumber] = React.useState();
   const [address, setAddress] = React.useState();
   const [gender, setGender] = React.useState();
+  const [dobDate, setDobDate] = React.useState();
   const [date, setDate] = React.useState(new Date());
   const [stateSelect, setselected] = React.useState('');
   const [citySelect, setCityselected] = React.useState('');
@@ -42,7 +47,30 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
   const [stage, setStage] = React.useState('');
   const [bloodGroup, setBloodGroup] = React.useState('');
   const [image, setImage] = React.useState([]);
+  const [uploadImg, setUploadImage] = React.useState();
+  const [documentFiles, setDocumentFiles] = React.useState();
+  const [allDocumentFiles, setAllDocumentFiles] = React.useState(documentFiles);
+  const [profilePic, setProfilePic] = React.useState();
+  console.log(profilePic, 'index piccc');
+  React.useEffect(() => {
+    if (allDocumentFiles) {
+      setAllDocumentFiles(prevDataArray => [
+        ...prevDataArray,
+        ...documentFiles,
+      ]);
+    } else if (documentFiles) {
+      setAllDocumentFiles(documentFiles);
+    }
+  }, [documentFiles]);
+
+  const healthRecord = allDocumentFiles?.map(item => item.filePath);
+  console.log(allDocumentFiles, 'allDocumentFilesallDocumentFiles');
+  console.log(healthRecord, 'healthRecordhealthRecordhealthRecord');
+
+  console.log(documentFiles, 'documentFilesdocumentFiles');
+  // const [imageType, setImageType] = React.useState([]);
   const [pincode, setPincode] = React.useState();
+  console.log(pincode, 'pincode');
   let dateVal =
     (date.getMonth() > 8 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)) +
     '/' +
@@ -67,132 +95,174 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
 
     console.log({formdata});
     // setAttachmentsUploading(true);
-
-    var requestOptions = {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formdata,
-      redirect: 'follow',
-    };
-    await fetch('http://3.110.179.66:3030/v1/upload-media', requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result, 'result 86 line');
-        // console.log(result.map((item) => item.link));
-        // setAttachmentsUrl(result.map((item) => item.link));
-        // setAttachmentsThumbnailsUrl(result.map((item) => item.thumbnail));
-        // setAttachmentsMetadata(result.map((item) => item.metadata));
-        // setAttachmentsUploading(false);
-      })
-      .catch(error => {
-        console.log('error', error);
-        // setAttachmentsUploading(false);
-      });
   };
 
   const uploadRecord = async () => {
     setIndex('healthRecord'), setHeaderName('View Health Record');
 
-    const token = await AsyncStorage.getItem('RegistrationToken').then(r => {
-      return r;
-    });
-    console.log(token, 'tokennnnn');
-    var formdata = new FormData();
-    image.map(item => formdata.append('files', item));
-    formdata.append('fileType', 1);
-    formdata.append('purpose', 'profile');
-    console.log(image, 'image in 103');
-    var requestOptions = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
-      },
-      body: formdata,
-    };
-
-    // await profileUpload(requestOptions)
-    //   .then(result => {
-    //     setIndex('healthRecord');
-    //     setHeaderName('View Health Record');
-    //     console.log(result, 'result');
-    //   })
-    //   .catch(err => console.log(err?.response, 'errrrr 38 line'));
-
-    // await fetch('http://3.110.179.66:3030/v1/upload', requestOptions)
-    // .then((response) => console.log(response.json(),'json'))
-    // .then((result) => {
-    //   console.log(result,'rrrrrrrrrrrrrrrrr1188888');
-    //   console.log(result.map((item) => item.link));
-    //   // setAttachmentsUrl(result.map((item) => item.link));
-    //   // setAttachmentsThumbnailsUrl(result.map((item) => item.thumbnail));
-    //   // setAttachmentsMetadata(result.map((item) => item.metadata));
-    //   // setAttachmentsUploading(false);
-    // })
-    // .catch((error) => {
-    //   console.log("error", error?.response);
-    //   // setAttachmentsUploading(false);
+    // const token = await AsyncStorage.getItem('RegistrationToken').then(r => {
+    //   return r;
     // });
-    // attachmentsUpload()
+    // console.log(token, 'tokennnnn');
+    // let formdata = new FormData();
+    // image.map(item => formdata.append('files', item));
+    // formdata.append('files', image[0]);
+    // formdata.append('fileType', 2);
+    // formdata.append('purpose', 'documents');
+    // console.log(image[0], 'image in 103');
+    // var requestOptions = {
+    //   // method: 'POST',
+
+    //   body: formdata,
+    //   redirect: 'follow',
+    // };
+    // await imageUpload(image)
+    // .then(result => {
+
+    //   console.log( 'result in image upload',result?.data);
+    //   setUploadImage(result?.data)
+    //   if (result?.data) {
+    //     setIndex('healthRecord'), setHeaderName('View Health Record');
+    //   }
+    // })
+    // .catch(err => console.log(err?.response?.data, 'errrrr 38 line',err?.response,'Error',err));
   };
-  console.log(typeof stateSelect?._id, 'stateSelect?._id');
-  console.log(
-    underTreatment,
-    '-----',
-    diagnosis?._id,
-    '87777777777',
-    stage,
-    '666',
-    diagnosis?._id,
-    '666',
-    gender,
-  );
+  console.log(signUpdata, 'signUpdata');
   const registrationFlow = async () => {
     const token = await AsyncStorage.getItem('RegistrationToken').then(r => {
       return r;
     });
     // var date = new Date('2010-10-11T00:00:00+05:30');
 
-    console.log(token, 'token66');
     userManagement({
       registrationToken: token,
       name: name,
       phone: Number(phoneNumber),
       role: 3,
-      gender: 1, // how to describe male,female
+      gender: gender, // how to describe male,female
       dob: dateVal,
       address: address,
-      city: citySelect?._id,
+      city: citySelect,
       pincode: pincode,
       state: stateSelect?._id,
       language: language, // same above
-      healthRecord: [
-        'https://vitmeds-dev.s3.ap-south-1.amazonaws.com/profile/2023/0527/1685204381954_1674828761748_full-body-checkup-bapa.pdf',
-      ],
+      healthRecord: healthRecord,
       height: height,
       weight: weight,
       bloodGroup: bloodGroup, // same
       underTreatment: underTreatment,
       diagnosis: diagnosis?._id,
-      stage: stage, // same above
+      stage: stage,
+      avatar: profilePic, // same above
     })
       .then(result => {
-        console.log(result, 'result in user management');
+        console.log(result?.data, 'result in user management');
         navigation.navigate(RoutesConstant.HOME_PAGE);
+        AsyncStorage.setItem('accessToken', result?.data?.accessToken);
+
+        AsyncStorage.setItem('UserInfo', JSON.stringify(result?.data?.user));
       })
       .catch(err => {
-        Alert.alert(
-          'Error',
-          err?.response?.data?.message || 'Enter valid number',
-          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-        );
+        toasterRef.current.showToaster({
+          message: err?.response?.data?.message || 'Enter valid number',
+          type: 'E',
+        });
         console.log(
           err?.response?.data,
           'err?.response?.dataerr?.response?.data',
         );
         // console.log(err?.response?.data?.message, 'err in user management');
       });
+  };
+  const selectDoc = async () => {
+    try {
+      const doc = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf, DocumentPicker.types.doc],
+        allowMultiSelection: true,
+      });
+
+      await imageUpload(doc).then(result => {
+        console.log(result?.data, 'resultttttttt');
+      });
+      console.log(doc, 'docccc');
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('error -----', err);
+      } else {
+        console.log(err, 'errr');
+        throw err;
+      }
+    }
+  };
+
+  const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const AlertPopUp = alertVal => {
+    // Alert.alert('Error',`${alertVal} is required` || 'The field is required', [
+
+    //   {text: 'OK', onPress: () => console.log('OK Pressed')},
+    // ])
+    toasterRef.current.showToaster({
+      message: `${alertVal} is required`,
+      type: 'E',
+    });
+  };
+
+  const onNextPress = () => {
+    // setIndex('profileUpload'),
+    // setHeaderName('Profile Upload');
+    // if (!language) {
+    //   return AlertPopUp('Language');
+    // } else if (!bloodGroup) {
+    //   return AlertPopUp('Blood-Group');
+    // } else if (!height) {
+    //   return AlertPopUp('Height');
+    // } else if (!weight) {
+    //   return AlertPopUp('Weight');
+    // } else {
+      setIndex('profileUpload'), setHeaderName('Profile Upload');
+      // handlePress()
+    // }
+  };
+  const onHandleHealthPress = () => {
+    console.log('object');
+    // if (!profilePic) {
+    //   toasterRef.current.showToaster(
+    //     {
+    //      message:'Please Upload Profile Pic',
+    //      type:'E'
+    //     }
+    //    );
+    // }else{
+    setIndex('healthRecord'), setHeaderName('View Health Record');
+    // }
+    // setIndex('healthRecord'), setHeaderName('View Health Record');
+
+    // handlePress()
+  };
+
+  const onHandlePress = () => {
+    // setIndex(1), setHeaderName('Health Record');
+    // handlePress()
+
+    // if (!name) {
+    //   return AlertPopUp('Name');
+    // } else if (reg.test(email) == false) {
+    //   return AlertPopUp('Valid email');
+    // } else if (!phoneNumber) {
+    //   return AlertPopUp('Phone Number');
+    // } else if (!gender) {
+    //   return AlertPopUp('Gender');
+    // } else if (!date) {
+    //   return AlertPopUp('DOB');
+    // } else if (!stateSelect) {
+    //   return AlertPopUp('State');
+    // } else if (!citySelect) {
+    //   return AlertPopUp('City');
+    // } else if (!pincode) {
+    //   return AlertPopUp('Pincode');
+    // } else {
+      setIndex(1), setHeaderName('Health Record');
+    // }
   };
   // console.log(name,'full name',email,phoneNumber,address,gender,date?.toLocaleDateString());
   const renderComponent = () => {
@@ -201,9 +271,7 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
       case 0:
         return (
           <BasicDetail
-            handlePress={() => {
-              setIndex(1), setHeaderName('Health Record');
-            }}
+            handlePress={() => onHandlePress()}
             navigation={navigation}
             setName={setName}
             name={name}
@@ -229,7 +297,8 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
         return (
           <HealthRecord
             handlePress={() => {
-              setIndex('healthRecord'), setHeaderName('View Health Record');
+              onNextPress();
+              // onHandleHealthPress()
             }}
             navigation={navigation}
             setLanguage={setLanguage}
@@ -250,22 +319,41 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
             bloodGroup={bloodGroup}
           />
         );
+      case 'profileUpload':
+        return (
+          <ProfileUpload
+            handlePress={() => {
+              onHandleHealthPress();
+            }}
+            profilePic={profilePic}
+            setProfilePic={setProfilePic}
+          />
+        );
       case 'healthRecord':
         return (
           <AddHealthRecord
             handlePress={() => {
-              registrationFlow();
+              // registrationFlow();
               // setIndex(2), setHeaderName('Health Record');
               //   navigation.navigate(RoutesConstant.)
             }}
             handleHealthRecord={() => {
+              // selectDoc()
               setIndex(2), setHeaderName('Health Record');
+              // setDocumentFiles([])
+            }}
+            handleHealthRecordNew={() => {
+              // selectDoc()
+              setIndex(2), setHeaderName('Health Record');
+              setDocumentFiles([]);
             }}
             navigation={navigation}
             arrowBack={() => {
-              setIndex(1), setHeaderName('Health Record');
+              setIndex('profileUpload');
             }}
-            image={image}
+            image={uploadImg}
+            documentFiles={documentFiles}
+            allDocumentFiles={allDocumentFiles}
           />
         );
       case 2:
@@ -275,6 +363,8 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
             navigation={navigation}
             setImage={setImage}
             image={image}
+            documentFiles={documentFiles}
+            setDocumentFiles={setDocumentFiles}
           />
         );
     }
@@ -298,7 +388,10 @@ const ProgressSteps = ({navigation, route}: ProgressStepsProps) => {
         backgroundColor: 'rgba(195, 136, 247, 0.2)',
         backgroundOpacity: 0.1,
       }}>
-      {headerName == 'View Health Record' ? null : (
+      <Toaster ref={toasterRef} />
+
+      {headerName == 'View Health Record' ||
+      headerName == 'Profile Upload' ? null : (
         <>
           <HeaderComponent text={headerName} handleBackPress={handlePress} />
           <View

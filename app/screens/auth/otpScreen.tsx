@@ -17,6 +17,7 @@ import {Button} from 'react-native-paper';
 import {RoutesConstant} from '../../navigators';
 import {verifyOtp} from '../../services/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toaster from '../../components/toast/Toaster';
 
 interface OtpScreenProps {}
 
@@ -27,6 +28,7 @@ const OtpScreen = ({navigation, route}: OtpScreenProps) => {
   const [timeLeft, setTimeLeft] = useState(30);
   let timer = () => {};
   const [otp, setOtp] = React.useState()
+  const toasterRef = React.useRef<any>();
 
   const startTimer = () => {
     timer = setTimeout(() => {
@@ -64,16 +66,20 @@ if (result?.data) {
   console.log(result?.data, 'verify data in login');
   AsyncStorage.setItem('accessToken', result?.data?.accessToken);
 
-  AsyncStorage.setItem('UserInfo', JSON.stringify(result?.data));
+  AsyncStorage.setItem('UserInfo', JSON.stringify(result?.data?.user));
 
   navigation.navigate(RoutesConstant.HOME_PAGE)
 }
         })
         .catch(err => {
-          Alert.alert('Error',err?.response?.data?.message || 'Enter valid number', [
-       
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ]);
+
+          toasterRef.current.showToaster(
+            {
+             message:err?.response?.data?.message || 'Enter valid number',
+             type:'E'
+            }
+           );
+        
           console.log('verify err', err?.response?.data?.message);
         });
       // navigation.navigate(RoutesConstant.HOME_PAGE)
@@ -97,10 +103,13 @@ if  (result?.data)  {
           console.log(result?.data, 'verify result');
         })
         .catch(err => {
-          Alert.alert('Error',err?.response?.data?.message || 'Enter valid number', [
-       
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ]);
+
+          toasterRef.current.showToaster(
+            {
+             message:err?.response?.data?.message || 'Enter valid number',
+             type:'E'
+            }
+           );
           console.log('verify err', err?.response?.data?.message);
         });
       // navigation.navigate(RoutesConstant.PROGRESSTEPS);
@@ -108,6 +117,8 @@ if  (result?.data)  {
   };
   return (
     <View style={styles.container}>
+                  <Toaster ref={toasterRef} />
+
       <HeaderComponent />
 
       <View style={{justifyContent: 'space-around', flex: 1}}>
